@@ -1,0 +1,75 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+    <!-- 分享对话框样式 -->
+    <style name="ShareDialog" parent="android:Theme.Light" >
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    <!-- popuwindow anim -->
+    <style name="PopupAnimation" parent="android:Animation" mce_bogus="1">          
+        <item name="android:windowEnterAnimation">@anim/popup_in</item>     
+        <item name="android:windowExitAnimation">@anim/popup_out</item>     
+    </style>
+    <style name="PopupNTAnimation" parent="android:Animation" mce_bogus="1">
+        <item name="android:windowEnterAnimation">@anim/popup_in_from_left</item>
+        <item name="android:windowExitAnimation">@anim/popup_out_to_right</item>
+    </style>
+    <style name="radio_tab">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:padding">10dp</item>  
+        <item name="android:gravity">center</item>  
+        <item name="android:textSize">12sp</item>  
+        <item name="android:paddingTop">4dp</item>  
+        <item name="android:paddingBottom">2dp</item>  
+        <item name="android:background">@color/tab</item>  
+        <item name="android:textColor">@drawable/navigatiion_fontcolor_selector</item>
+        <item name="android:button">@null</item>
+        
+    </style>
+    <!-- 每列的布局 -->
+    <style name="list_item">
+         <item name="android:layout_height">wrap_content</item>  
+        <item name="android:layout_width">match_parent</item>  
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:background">@color/white</item>    
+    </style>  
+    <style name="list_left">
+         <item name="android:layout_height">wrap_content</item>  
+        <item name="android:layout_width">match_parent</item>  
+        <item name="android:layout_weight">2</item>  
+        <item name="android:gravity">center|right</item>
+        <item name="android:textSize">14sp</item>    
+    </style> 
+     <style name="list_right">
+         <item name="android:layout_height">wrap_content</item>  
+        <item name="android:layout_width">match_parent</item>  
+        <item name="android:layout_weight">1</item>  
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_marginLeft">10dp</item>    
+    </style> 
+
+</resources>

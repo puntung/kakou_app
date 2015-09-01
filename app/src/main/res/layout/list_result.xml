@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+  	android:layout_marginBottom="10dp"
+    >
+    
+    <LinearLayout  style="@style/list_item" >
+        <TextView 
+            style="@style/list_left"
+            android:text="@string/hpzl"
+            />
+        <TextView 
+            android:id="@+id/tv_hpzl"
+            style="@style/list_right"
+            />  
+    </LinearLayout>
+    
+    <LinearLayout style="@style/list_item" >
+        <TextView 
+            style="@style/list_left"
+            android:text="@string/hphm"
+            />
+        <TextView 
+            android:id="@+id/tv_hphm"
+            style="@style/list_right"
+            />
+        
+    </LinearLayout>
+    
+   <LinearLayout style="@style/list_item" >
+        <TextView 
+            style="@style/list_left"
+            android:text="@string/clpp1"
+            />
+        <TextView 
+            android:id="@+id/tv_clpp1"
+            style="@style/list_right"
+            />
+    </LinearLayout>
+	 <LinearLayout style="@style/list_item" >
+        <TextView 
+            style="@style/list_left"
+            android:text="@string/clpp2"
+            />
+        <TextView 
+            android:id="@+id/tv_clpp2"
+            style="@style/list_right"
+            />
+    </LinearLayout>
+	 <LinearLayout style="@style/list_item" >
+        <TextView 
+            style="@style/list_left"
+            android:text="@string/clxh"
+            />
+        <TextView 
+            android:id="@+id/tv_clxh"
+            style="@style/list_right"
+            />
+    </LinearLayout>
+	<LinearLayout style="@style/list_item" >
+        <TextView 
+            style="@style/list_left"
+            android:text="@string/zzcmc"
+            />
+        <TextView 
+            android:id="@+id/tv_zzcmc"
+            style="@style/list_right"
+            />
+    </LinearLayout>
+    <LinearLayout style="@style/list_item" >
+        <TextView 
+            style="@style/list_left"
+            android:text="@string/clsbdh"
+            />
+        <TextView 
+            android:id="@+id/tv_clsbdh"
+            style="@style/list_right"
+            />
+    </LinearLayout>
+    <LinearLayout style="@style/list_item" >
+        <TextView 
+            style="@style/list_left"
+            android:text="@string/fdjh"
+            />
+        <TextView 
+            android:id="@+id/tv_fdjh"
+            style="@style/list_right"
+            />
+    </LinearLayout>
+    <LinearLayout style="@style/list_item" >
+        <TextView 
+            style="@style/list_left"
+            android:text="@string/cllx"
+            />
+        <TextView 
+            android:id="@+id/tv_cllx"
+            style="@style/list_right"
+            />
+    </LinearLayout>
+    <LinearLayout style="@style/list_item" >
+        <TextView 
+            style="@style/list_left"
+            android:text="@string/csys"
+            />
+        <TextView 
+            android:id="@+id/tv_csys"
+            style="@style/list_right"
+            />
+    </LinearLayout>
+    <LinearLayout style="@style/list_item" >
+        <TextView 
+            style="@style/list_left"
+            android:text="@string/syr"
+            />
+        <TextView 
+            android:id="@+id/tv_syr"
+            style="@style/list_right"
+            />
+    </LinearLayout>
+    <LinearLayout style="@style/list_item" >
+        <TextView 
+            style="@style/list_left"
+            android:text="@string/fzrq"
+            />
+        <TextView 
+            android:id="@+id/tv_fzrq"
+            style="@style/list_right"
+            />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#fff</color>
+    <color name="grey">#EEEEEE</color>
+    <color name="tab">#E5E5E5</color>
+    <color name="subtab">#F4F4F4</color>
+    <color name="font_grey">#9D9D9D</color>
+    <color name="font_blue">#32A5E7</color>
+    <color name="orange">#FF9322</color>
+    <color name="grey2">#B9BCC1</color>
+    <color name="theme_blue">#0ACAFA</color>
+    <color name="background">#E6E6E6</color>
+    <color name="popupwindowbg">#EBEAF0</color>
+    <color name="darkblue">#1083D4</color>
+</resources>

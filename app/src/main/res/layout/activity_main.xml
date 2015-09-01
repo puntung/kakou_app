@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:id="@+id/main"
+    >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/tab">
+
+   <RadioGroup  
+        android:id="@+id/rg_tab"  
+        android:orientation="vertical"  
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+       android:layout_weight="9"
+        >
+  
+        <RadioButton  
+            style="@style/radio_tab"
+            android:drawableTop="@drawable/tab_realtime_selector"
+            android:text="实时" 
+            />
+        <RadioButton
+            style="@style/radio_tab"
+            android:drawableTop="@drawable/tab_history_selector"
+            android:text="历史" />
+        <RadioButton  
+            style="@style/radio_tab"
+            android:drawableTop="@drawable/tab_more_selector"
+            android:text="更多" />
+
+        </RadioGroup>
+
+        <ImageView
+            android:id="@+id/setup_v"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:src="@drawable/tab_setup_selector"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+   <FrameLayout 
+	    android:id="@+id/content"  
+        android:layout_width="0dp"  
+        android:layout_height="match_parent"  
+        android:layout_weight="1"
+	    ></FrameLayout>
+
+</LinearLayout>

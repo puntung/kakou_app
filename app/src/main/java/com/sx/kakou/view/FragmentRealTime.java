@@ -2,11 +2,8 @@ package com.sx.kakou.view;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import retrofit.Callback;
@@ -14,16 +11,18 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 import com.example.sx_kakou.R;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.square.github.restrofit.Constants;
 import com.square.github.restrofit.KakouClient;
 import com.square.github.restrofit.ServiceGenerator;
 import com.sx.kakou.tricks.CarinfoAdapter;
 import com.sx.kakou.tricks.CustomDrawerLayout;
+import com.sx.kakou.tricks.PullLoadMoreRecyclerView;
 import com.sx.kakou.tricks.RealTimeCarInfoAdapter;
+import com.sx.kakou.tricks.RecyclerViewAdapter;
 import com.sx.kakou.tricks.SwitchButton;
 
 import android.annotation.SuppressLint;
@@ -32,37 +31,28 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class FragmentRealTime extends Fragment implements OnRefreshListener,OnScrollListener
+public class FragmentRealTime extends Fragment implements OnScrollListener
 		,OnItemClickListener,View.OnClickListener,SwitchButton.OnChangeListener{
-	private static SwipeRefreshLayout homeRefreshLayout;
-	private static ListView mCtxListView;
+	private static PullLoadMoreRecyclerView homeRefreshLayout;
+    private RecyclerViewAdapter mRecyclerViewAdapter;
 	private static TextView tv_place;
 	private static TextView tv_fxbh;
 	private static TextView tv_csys;
@@ -70,15 +60,11 @@ public class FragmentRealTime extends Fragment implements OnRefreshListener,OnSc
     private static Button mnav_btn;
     SharedPreferences mPreferences  = null;
 	private RealTimeCarInfoAdapter adapter = null;
-	private static View view;
-    private  PopupWindow popupWindow;
     private CustomDrawerLayout mDrawerLayout;
     private ListView mNavListView = null;
-    private static List<String> mlist = null;
-	JSONArray jsonArray = null;
+	JsonArray jsonArray = null;
 	private boolean isAutoRefresh = false;
 	private Context mContext = null;
-	private static int item_position = -1;
 	private  int user_id= -1;
     private static  int mTag = 0;   //导航标签
 	private static List nav_place = null;
@@ -91,11 +77,10 @@ public class FragmentRealTime extends Fragment implements OnRefreshListener,OnSc
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragmentrealtime, null);
         mPreferences = getActivity().getSharedPreferences("config",Context.MODE_PRIVATE);
-		homeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.home_swip);
+		homeRefreshLayout = (PullLoadMoreRecyclerView)view.findViewById(R.id.home_swip);
         mDrawerLayout = (CustomDrawerLayout)view.findViewById(R.id.drawer_layout);
         mNavListView = (ListView)view.findViewById(R.id.left_drawer_list);
-        mCtxListView = (ListView)view.findViewById(R.id.con_list);
-		tv_place = (TextView)view.findViewById(R.id.rt_tv_place);
+        tv_place = (TextView)view.findViewById(R.id.rt_tv_place);
 		tv_fxbh = (TextView)view.findViewById(R.id.rt_tv_fxhb);
 		tv_csys = (TextView)view.findViewById(R.id.rt_tv_csys);
         mnav_btn = (Button)view.findViewById(R.id.nav_completed_btn);
@@ -108,15 +93,11 @@ public class FragmentRealTime extends Fragment implements OnRefreshListener,OnSc
         mnav_btn.setOnClickListener(this);
 		sw_btn = (SwitchButton)view.findViewById(R.id.sw_autoRefresh);
 		sw_btn.setOnChangeListener(this);
-        mCtxListView.setOnItemClickListener(this);
         mNavListView.setOnItemClickListener(this);
 		Intent intent = getActivity().getIntent();
 		user_id = intent.getIntExtra("user_id",-1);
-		homeRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
-				android.R.color.holo_green_light,
-				android.R.color.holo_orange_light,
-				android.R.color.holo_red_light);
-		homeRefreshLayout.setOnRefreshListener(this);
+        homeRefreshLayout.setLinearLayout();
+        homeRefreshLayout.setPullLoadMoreListener(new PullLoadMoreListener());
 		return view;
 	}
 	@Override
@@ -124,16 +105,21 @@ public class FragmentRealTime extends Fragment implements OnRefreshListener,OnSc
 		super.onAttach(activity);
 		this.mContext = activity;
 		}
-	
-	@Override
-	public void onRefresh() {
-		if (!isAutoRefresh){
+
+    class PullLoadMoreListener implements PullLoadMoreRecyclerView.PullLoadMoreListener {
+        @Override
+        public void onRefresh() {
             RefreshCarInfo(user_id);
-		}
-	}
+        }
+
+        @Override
+        public void onLoadMore() {
+
+        }
+    }
 	
 	public void RefreshCarInfo(final int user_id){
-			homeRefreshLayout.setRefreshing(true);
+			//homeRefreshLayout.setRefreshing(true);
             int place =Integer.parseInt(mPreferences.getString("place","0").substring(0,1))+2;
             int fxbh = Integer.parseInt(mPreferences.getString("fxbh", "0").substring(0,1))+1;
 			String queryString = user_id+"+place:"+place+"+fxbh:"+fxbh;
@@ -151,40 +137,47 @@ public class FragmentRealTime extends Fragment implements OnRefreshListener,OnSc
                 @Override
                 public void success(JsonObject arg0, Response arg1) {
                     homeRefreshLayout.setRefreshing(false);
-                    try {
-                        //只保留前100条数据
-                        if (mList.size() > 99) {
-                            mList = mList.subList(0, 50);
-                        }
-                        JSONArray mArray = new JSONArray(arg0.get("items").toString());
-                        if (mArray.length() > 1) {
-                            for (int i = 0; i < mArray.length(); i++) {
-                                mList.add(0, mArray.get(i).toString());
-                            }
-                        } else if (mArray.length() != 0) {
-                            mList.add(0, mArray.get(0).toString());
-                        }
 
-                        jsonArray = new JSONArray(mList.toString());
-                        if (mContext != null) {
-                            adapter = new RealTimeCarInfoAdapter(mContext, jsonArray);
+                        JsonArray mArray = new JsonArray();
+                        mArray = arg0.get("items").getAsJsonArray();
+
+                        if (mRecyclerViewAdapter == null) {
+                            mRecyclerViewAdapter = new RecyclerViewAdapter(getActivity(), homeRefreshLayout, mArray);
+                            setOnItemClickListener(mRecyclerViewAdapter);
+                            jsonArray  = mRecyclerViewAdapter.getDataList();
+                            homeRefreshLayout.setAdapter(mRecyclerViewAdapter);
                         } else {
-                            adapter = new RealTimeCarInfoAdapter(getActivity(), jsonArray);
+                            setOnItemClickListener(mRecyclerViewAdapter);
+                            mRecyclerViewAdapter.getDataList().addAll(mArray);
+                            jsonArray  = mRecyclerViewAdapter.getDataList();
+                            mRecyclerViewAdapter.notifyDataSetChanged();
                         }
-                        mCtxListView.setAdapter(adapter);
                         if (isAutoRefresh) {
                             RefreshCarInfo(user_id);
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        homeRefreshLayout.setRefreshing(false);
-                    }
 
                 }
 
             });
 	}
-	
+    public void setOnItemClickListener(RecyclerViewAdapter adapter){
+        adapter.setOnItemClickListener(new RecyclerViewAdapter.MyItemClickListener() {
+            @Override
+            public void OnItemClick(int position) {
+                try {
+                    Intent intent = new Intent(getActivity(),HistoryItemActivity.class);
+                    intent.putExtra("data", jsonArray.toString());
+                    intent.putExtra("position", position);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
 	public void getPlace(){
 		KakouClient client = ServiceGenerator.createService(KakouClient.class, Constants.BASE_URL);
 		client.getPlace(MyCallback);
@@ -223,110 +216,38 @@ public class FragmentRealTime extends Fragment implements OnRefreshListener,OnSc
         }
     };
 
-	public void getCgsInfo(final RecyclerView sb_cys, String qs){
-		KakouClient client = ServiceGenerator.createService(KakouClient.class,Constants.BASE_URL,"kakou","pingworker");
-		client.getinfo(qs, new Callback<JsonObject>() {
-            @Override
-            public void success(JsonObject jsonObject, Response response) {
-                String cgs_tag[] = mContext.getResources().getStringArray(R.array.cgs_label_en);
-                String cgs_value[] = mContext.getResources().getStringArray(R.array.cgs_label_cn);
-                try {
-                    JSONObject cgsinfo = new JSONObject(jsonObject.toString());
-                    if (cgsinfo.getInt("total_count") == 0) {
-                        cgs_tag = null;
-                    }
-                    CarinfoAdapter cgsinfoAdapter = new CarinfoAdapter(getActivity(), cgsinfo, cgs_tag, cgs_value);
-                    sb_cys.setAdapter(cgsinfoAdapter);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+//	public void getCgsInfo(final RecyclerView sb_cys, String qs){
+//		KakouClient client = ServiceGenerator.createService(KakouClient.class, Constants.BASE_URL, "kakou", "pingworker");
+//		client.getinfo(qs, new Callback<JsonObject>() {
+//            @Override
+//            public void success(JsonObject jsonObject, Response response) {
+//                String cgs_tag[] = mContext.getResources().getStringArray(R.array.cgs_label_en);
+//                String cgs_value[] = mContext.getResources().getStringArray(R.array.cgs_label_cn);
+//                try {
+//                    JSONObject cgsinfo = new JSONObject(jsonObject.toString());
+//                    if (cgsinfo.getInt("total_count") == 0) {
+//                        cgs_tag = null;
+//                    }
+//                    JSONArray array = new JSONArray(cgsinfo.getString("items"));
+//                    JSONObject itemobject = new JSONObject(array.get(0).toString());
+//                    CarinfoAdapter cgsinfoAdapter = new CarinfoAdapter(getActivity(), itemobject, cgs_tag, cgs_value);
+//                    sb_cys.setAdapter(cgsinfoAdapter);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void failure(RetrofitError retrofitError) {
+//                retrofitError.printStackTrace();
+//            }
+//        });
+//	}
 
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                retrofitError.printStackTrace();
-            }
-        });
-	}
-
-	public void showwindow(View parent,int position){
-			ImageLoader imageLoader = ImageLoader.getInstance();
-			LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = inflater.inflate(R.layout.popwin_carinfo, null);
-			ImageView car_img = (ImageView)view.findViewById(R.id.carinfo_img_hd);
-			RecyclerView cgs_cys = (RecyclerView)view.findViewById(R.id.cgs_rcy);
-			RecyclerView sb_cys = (RecyclerView)view.findViewById(R.id.sb_rcy);
-			ImageView close_img = (ImageView)view.findViewById(R.id.pop_close);
-
-			popupWindow = new PopupWindow(view);
-			popupWindow.setWidth(parent.getDisplay().getWidth() * 90 / 100);
-			popupWindow.setHeight(parent.getDisplay().getHeight() * 90 / 100);
-			// 使其聚集
-	        popupWindow.setFocusable(true);
-	        // 设置允许在外点击消失
-	        popupWindow.setOutsideTouchable(true);
-	        // 这个是为了点击“返回Back”也能使其消失
-	        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-			backgroundAlpha(0.4f);
-			popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                @Override
-                public void onDismiss() {
-                    backgroundAlpha(1f);
-                }
-            });
-            close_img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    popupWindow.dismiss();
-                }
-            });
-			popupWindow.setAnimationStyle(R.style.PopupAnimation);
-	        popupWindow.showAtLocation(parent, Gravity.CENTER | Gravity.CLIP_HORIZONTAL, 0, 0);
-	        popupWindow.update();
-	        try {
-	        JSONObject info = new JSONObject(jsonArray.getString(position));
-
-	        String imgurl = info.getString("imgurl");
-	        DisplayImageOptions options = getImageLoaderOpt();
-				cgs_cys.setHasFixedSize(true);
-				sb_cys.setHasFixedSize(true);
-				RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-				RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(getActivity());
-				cgs_cys.setLayoutManager(layoutManager);
-				sb_cys.setLayoutManager(layoutManager2);
-				getCgsInfo(sb_cys, info.getString("hphm"));
-
-				String carinfo_tag[] = mContext.getResources().getStringArray(R.array.catinfo_label_en);
-				String carinfo_value[] = mContext.getResources().getStringArray(R.array.catinfo_label_cn);
-				CarinfoAdapter carinfoAdapter = new CarinfoAdapter(getActivity(),info,carinfo_tag,carinfo_value);
-				cgs_cys.setAdapter(carinfoAdapter);
-				imageLoader.displayImage(imgurl,car_img, options);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-	}
-	/**
-	 * 设置添加屏幕的背景透明度
-	 * @param bgAlpha
-	 */
-	public void backgroundAlpha(float bgAlpha)
-	{
-		WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
-		lp.alpha = bgAlpha; //0.0-1.0
-		getActivity().getWindow().setAttributes(lp);
-	}
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
 		switch (arg0.getId()){
-            case R.id.con_list:
-                item_position = position;
-                if (popupWindow==null||!popupWindow.isShowing()){
-                    showwindow(view, position);
-                }
-                break;
             case R.id.left_drawer_list:
-                System.out.println(position);
                 SelectedItem(position);
                 break;
 

@@ -156,7 +156,6 @@ public class MyClient implements Client {
       // Add all headers.
       for (Header header : request.getHeaders()) {
         addHeader(new BasicHeader(header.getName(), header.getValue()));
-          addHeader(new BasicHeader("X-API-KEY",Constants.X_API_KEY));
       }
 
       // Add the content body.

@@ -57,10 +57,8 @@
         <item>clpp</item>
         <item>place</item>
         <item>hpys</item>
-        <item>cllx_code</item>
         <item>cllx</item>
         <item>fxbh</item>
-        <item>hpzl_code</item>
         <item>csys</item>
     </string-array>
     <string-array name="catinfo_label_cn">
@@ -72,10 +70,8 @@
         <item>车辆品牌</item>
         <item>地点</item>
         <item>号牌颜色</item>
-        <item>车辆类型代码</item>
         <item>车辆类型</item>
         <item>方向编号</item>
-        <item>号牌种类代码</item>
         <item>车身颜色</item>
     </string-array>
 </resources>

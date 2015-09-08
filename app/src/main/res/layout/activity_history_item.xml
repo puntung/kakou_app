@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/ah_mainlayout"
+    android:clickable="true"
+    tools:context="com.sx.kakou.view.HistoryItemActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:background="@color/tab"
+        android:layout_gravity="center"
+        >
+        <TextView
+            android:id="@+id/ah_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/back"
+            android:textSize="16sp"
+            android:textColor="@drawable/navigatiion_fontcolor_selector2"
+            android:drawableLeft="@drawable/navigationbar_back_selector"
+            android:drawablePadding="5dp"
+            android:layout_margin="8dp"
+            android:clickable="true"
+            />
+        </LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    </android.support.v4.view.ViewPager>
+
+</LinearLayout>

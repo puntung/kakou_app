@@ -45,7 +45,6 @@ public class PullLoadMoreRecyclerView extends LinearLayout {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayoutOnRefresh(this));
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setVerticalScrollBarEnabled(true);
-
         mRecyclerView.setHasFixedSize(true);
 //        setLinearLayout();
         // 设置Item增加、移除动画
@@ -54,19 +53,6 @@ public class PullLoadMoreRecyclerView extends LinearLayout {
         //mRecyclerView.addItemDecoration(new DividerItemDecoration(
         //getActivity(), DividerItemDecoration.HORIZONTAL_LIST));
        mRecyclerView.setOnScrollListener(new RecyclerViewOnScroll(this));
-
-//        mRecyclerView.setOnTouchListener(
-//                new View.OnTouchListener() {
-//                    @Override
-//                    public boolean onTouch(View v, MotionEvent event) {
-//                        if (isRefresh) {
-//                            return true;
-//                        } else {
-//                            return false;
-//                        }
-//                    }
-//                }
-//        );
 
         mFooterView = (LinearLayout) view.findViewById(R.id.footer_linearlayout);
         mFooterView.setVisibility(View.GONE);
@@ -144,7 +130,6 @@ public class PullLoadMoreRecyclerView extends LinearLayout {
 
     public void setRefreshing(final boolean isRefreshing) {
         mSwipeRefreshLayout.post(new Runnable() {
-
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(isRefreshing);

@@ -15,6 +15,7 @@ import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
@@ -47,7 +48,7 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
     private PullLoadMoreRecyclerView mPullLoadMoreRecyclerView;
     private  KakouClient client ;
 	private int mCount = 1;
-    private  List<JSONObject> mlist = new ArrayList<JSONObject>();
+    private  JsonArray marray = new JsonArray();
     private RecyclerViewAdapter mRecyclerViewAdapter;
     private static SharedPreferences mPreference;
     private PopupWindow popupWindow;
@@ -56,8 +57,6 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
     private TextView t_hpys;
     private TextView t_st;
     private TextView t_et;
-    private DatePickerDialog datePickerDialog;
-    private Calendar mCalendar;
     private ImageView img_go;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +66,8 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
         mPreference = getActivity().getSharedPreferences("config", Context.MODE_PRIVATE);
         mPullLoadMoreRecyclerView = (PullLoadMoreRecyclerView) view.findViewById(R.id.pullLoadMoreRecyclerView);
         //mPullLoadMoreRecyclerView.setRefreshing(true);
+        getCarinfosList(mCount);
+
         t_place = (TextView)view.findViewById(R.id.fh_place);
         t_fxhb = (TextView)view.findViewById(R.id.fh_fxhb);
         t_hpys = (TextView)view.findViewById(R.id.fh_hpys);
@@ -84,7 +85,6 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
         mPullLoadMoreRecyclerView.setPullLoadMoreListener(new PullLoadMoreListener());
 		return view;
 	}
-
 
     class PullLoadMoreListener implements PullLoadMoreRecyclerView.PullLoadMoreListener {
         @Override
@@ -327,31 +327,32 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
         public void getCarinfosList(final int mCount) {
             String  place = mPreference.getString("kakou_place_code","");
             String  fxbh = mPreference.getString("kakou_fxbh_code", "");
-            String  hpys = mPreference.getString("kakou_hpys", "");
-            String  st = mPreference.getString("kakou_st", "");
+            String  hpys = mPreference.getString("kakou_hpys", "").substring(0, 1);
+            final String  st = mPreference.getString("kakou_st", "");
             String et = mPreference.getString("kakou_et", "");
-
-            String q = "粤LD%+st:"+st+"+et:"+et+"+place:"+place+"+fxbh:"+fxbh+"+hpys:"+hpys+"+ppdm:114&page=" + mCount + "&per_page=20&sort=ppdm&order=desc";
-            System.out.println(q);
-            client.getCarInfosList(q, new Callback<JsonObject>() {
+            String queryStr = "粤LD%+st:"+st+"+et:"+et+"+place:"+place+"+fxbh:"+fxbh+"+hpys:"+hpys+"+ppdm:114&page=" + mCount + "&per_page=20&sort=ppdm&order=desc";
+            client.getCarInfosList(queryStr, new Callback<JsonObject>() {
                 @TargetApi(Build.VERSION_CODES.KITKAT)
                 @Override
                 public void success(JsonObject jsonObject, Response response) {
-                    System.out.println(jsonObject.toString());
-                    JsonArray marray = jsonObject.get("items").getAsJsonArray();
-                    if (marray.size()!=0){
-                    try {
-                        if (mRecyclerViewAdapter == null) {
-                            mRecyclerViewAdapter = new RecyclerViewAdapter(getActivity(), mPullLoadMoreRecyclerView, marray);
-                            mPullLoadMoreRecyclerView.setAdapter(mRecyclerViewAdapter);
-                        } else {
-                            mRecyclerViewAdapter.getDataList().addAll(marray);
-                            mRecyclerViewAdapter.notifyDataSetChanged();
+                    JsonArray iarray = jsonObject.get("items").getAsJsonArray();
+                    if (iarray.size()!=0){
+                        try {
+                            if (mRecyclerViewAdapter == null) {
+                                mRecyclerViewAdapter = new RecyclerViewAdapter(getActivity(), mPullLoadMoreRecyclerView, iarray);
+                                marray = mRecyclerViewAdapter.getDataList();
+                                setOnItemClickListener(mRecyclerViewAdapter);
+                                mPullLoadMoreRecyclerView.setAdapter(mRecyclerViewAdapter);
+                            } else {
+                                setOnItemClickListener(mRecyclerViewAdapter);
+                                mRecyclerViewAdapter.getDataList().addAll(iarray);
+                                marray = mRecyclerViewAdapter.getDataList();
+                                mRecyclerViewAdapter.notifyDataSetChanged();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    }else {
+                    } else {
                         Toast.makeText(getActivity(),"没有新数据",Toast.LENGTH_SHORT).show();
                     }
                     mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
@@ -360,6 +361,20 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
                 @Override
                 public void failure(RetrofitError retrofitError) {
                     System.out.println("failure");
+                }
+            });
+        }
+
+        public void setOnItemClickListener(RecyclerViewAdapter adapter){
+            adapter.setOnItemClickListener(new RecyclerViewAdapter.MyItemClickListener() {
+                @Override
+                public void OnItemClick(int position) {
+                    Intent intent = new Intent(getActivity(),HistoryItemActivity.class);
+                    intent.putExtra("data",marray.toString());
+                    intent.putExtra("position", position);
+                    intent.putExtra("count",mCount);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
             });
         }

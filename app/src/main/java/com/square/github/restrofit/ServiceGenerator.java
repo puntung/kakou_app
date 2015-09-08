@@ -17,6 +17,7 @@ public class ServiceGenerator {
 	        RestAdapter.Builder builder = new RestAdapter.Builder()
 	         .setEndpoint(Constants.BASE_URL)
 	         .setClient(new OkClient(new OkHttpClient()));
+            //add Header
              builder.setRequestInterceptor(
                      new RequestInterceptor() {
                          @Override

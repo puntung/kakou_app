@@ -22,6 +22,8 @@ public interface KakouClient {
 	void login(@Body JsonObject object,Callback<JsonObject> callback);
 	@GET("/rest_kakou/index.php/v1/logo/fresh2")
 	void getRefresh(@Query("q") String qs,Callback<JsonObject> callback);
+	@GET("/rest_kakou/index.php/v1/logo/ppdm")
+	 void getPpdm(Callback<JsonObject> callback );
 	@GET("/rest_kakou/index.php/v1/logo/place")
 	void getPlace(Callback<JsonObject> callback);
 	@GET("/rest_kakou/index.php/v1/logo/fxbh")

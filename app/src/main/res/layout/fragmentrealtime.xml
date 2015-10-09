@@ -6,16 +6,18 @@
     <LinearLayout
         android:id="@+id/rt_navigation_bar"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
         android:orientation="horizontal"
         android:background="@color/subtab"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         >
 
        <TextView
-          android:layout_width="wrap_content"
+          android:layout_width="150dp"
 		  android:layout_height="match_parent"
 		  android:id="@+id/rt_tv_place"
-          android:textSize="14sp"
+          android:textSize="16sp"
            android:textColor="@drawable/navigatiion_fontcolor_selector"
            android:text="@string/place"
            android:layout_marginLeft="20dp"
@@ -23,95 +25,77 @@
            android:focusable="true"
            />
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
             android:id="@+id/rt_tv_fxhb"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textColor="@drawable/navigatiion_fontcolor_selector"
             android:text="@string/fxhb"
             android:layout_marginLeft="20dp"
             android:gravity="center"
             android:focusable="true"
             />
+        <!--
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:id="@+id/rt_tv_csys"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textColor="@drawable/navigatiion_fontcolor_selector"
             android:text="@string/csys"
             android:layout_marginLeft="20dp"
             android:gravity="center"
             android:focusable="true"
             />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="自动刷新"
+        -->
+        <EditText
+            android:id="@+id/rt_et_hphm"
+            android:layout_width="140dp"
+            android:layout_height="35dp"
+            android:hint="号牌号码"
+            android:gravity="center"
             android:textSize="14sp"
+            android:singleLine="true"
+            android:background="@drawable/corners_bg"
+            />
+
+        <TextView
+            android:id="@+id/rt_tv_control"
+            android:layout_width="100dp"
+            android:layout_height="35dp"
+            android:text="立即监控"
+            android:textSize="16sp"
             android:gravity="center"
             android:layout_marginLeft="20dp"
-            android:textColor="@color/font_grey" />
-        <com.sx.kakou.tricks.SwitchButton
-            android:id="@+id/sw_autoRefresh"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="10dp"
-            />
+            android:background="@drawable/btn_blue_selector"
+            android:textColor="@color/white" />
+
     </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/background"/>
-    <com.sx.kakou.tricks.CustomDrawerLayout
-        android:id="@+id/drawer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <com.sx.kakou.tricks.PullLoadMoreRecyclerView
-            android:id ="@+id/home_swip"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-        </com.sx.kakou.tricks.PullLoadMoreRecyclerView>
+
         <LinearLayout
-            android:id="@+id/menu_layout_left"
-            android:layout_width="250dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:choiceMode="singleChoice"
-            android:orientation="vertical" >
-                <ListView
-                    android:id="@+id/left_drawer_list"
-                    android:layout_width="250dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="9"
-                    android:layout_gravity="left"
-                    android:background="@color/white"
-                    android:choiceMode="multipleChoice"
-                    android:divider="@android:color/transparent"
-                    >
-                </ListView>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <com.sx.kakou.tricks.PullLoadMoreRecyclerView
+                android:id ="@+id/home_swip"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="match_parent"
                 >
-                <Button
-                    android:id="@+id/nav_completed_btn"
-                    android:text="完成"
-                    android:textColor="@color/white"
-                    android:layout_width="200dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="bottom"
-                    android:background="@drawable/nav_btn_selector"
-                    android:layout_marginBottom="10dp"
-                    />
-            </LinearLayout>
+            </com.sx.kakou.tricks.PullLoadMoreRecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id ="@+id/control_swip"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+               >
+            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
-    </com.sx.kakou.tricks.CustomDrawerLayout>
+
 
 </LinearLayout>

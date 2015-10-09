@@ -19,16 +19,19 @@
        android:layout_weight="9"
         >
   
-        <RadioButton  
+        <RadioButton
+            android:id="@+id/rb_realtime"
             style="@style/radio_tab"
             android:drawableTop="@drawable/tab_realtime_selector"
             android:text="实时" 
             />
         <RadioButton
+            android:id="@+id/rb_history"
             style="@style/radio_tab"
             android:drawableTop="@drawable/tab_history_selector"
             android:text="历史" />
-        <RadioButton  
+        <RadioButton
+            android:id="@+id/rb_more"
             style="@style/radio_tab"
             android:drawableTop="@drawable/tab_more_selector"
             android:text="更多" />

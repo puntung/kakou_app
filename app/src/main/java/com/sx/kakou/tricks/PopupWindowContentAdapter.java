@@ -20,8 +20,6 @@ public class PopupWindowContentAdapter  extends BaseAdapter {
     private List<String> strs;
     private Context context;
 
-    private int position = 0;
-
     public PopupWindowContentAdapter(Context context, List<String> strs) {
         super();
         this.strs = strs;
@@ -54,7 +52,7 @@ public class PopupWindowContentAdapter  extends BaseAdapter {
         } else {
             holder = (Holder) convertView.getTag();
         }
-        holder.tv_popupwindow_text.setText(strs.get(position).toString());
+        holder.tv_popupwindow_text.setText(strs.get(position));
         return convertView;
     }
 

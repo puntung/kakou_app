@@ -14,4 +14,12 @@
         </shape>
     </item>
 
+    <item android:state_enabled="false" android:drawable="@color/grey">
+        <shape>
+            <corners android:radius="5dip"/>
+            <solid android:color="#3894BB"/>
+        </shape>
+
+    </item>
+
 </selector>

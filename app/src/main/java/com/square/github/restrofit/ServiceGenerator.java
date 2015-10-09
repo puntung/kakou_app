@@ -15,7 +15,7 @@ public class ServiceGenerator {
 	        // call basic auth generator method without user and pass
 	        //return createService(serviceClass, baseUrl, null, null);
 	        RestAdapter.Builder builder = new RestAdapter.Builder()
-	         .setEndpoint(Constants.BASE_URL)
+	         .setEndpoint(baseUrl)
 	         .setClient(new OkClient(new OkHttpClient()));
             //add Header
              builder.setRequestInterceptor(
@@ -57,7 +57,7 @@ public class ServiceGenerator {
 	    	
 	    	//Digest authentication 的验证方法
 	        RestAdapter.Builder builder = new RestAdapter.Builder()
-            .setEndpoint(Constants.BASE_URL)
+            .setEndpoint(baseUrl)
             .setClient(new MyClient(username, password));
             builder.setRequestInterceptor(
                     new RequestInterceptor() {

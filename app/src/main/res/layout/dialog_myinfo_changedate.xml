@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:id="@+id/ly_myinfo_changedate_child"
-        android:layout_width="300dip"
+        android:layout_width="350dip"
         android:layout_height="wrap_content"
         android:layout_marginLeft="27dip"
         android:layout_marginRight="27dip"
@@ -37,7 +37,7 @@
 	        <com.sx.kakou.wheel.widget.views.WheelView
 	            android:id="@+id/wv_date_year"
 	            android:layout_width="0dip"
-	            android:layout_weight="1"
+	            android:layout_weight="1.5"
 	            android:layout_height="match_parent"
 	            android:layout_gravity="center_vertical"
 	            />
@@ -55,6 +55,20 @@
 	            android:layout_height="match_parent"
 	            android:layout_gravity="center_vertical"
 	            />
+            <com.sx.kakou.wheel.widget.views.WheelView
+                android:id="@+id/wv_date_hour"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                />
+            <com.sx.kakou.wheel.widget.views.WheelView
+                android:id="@+id/wv_date_minute"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                />
 	    </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"

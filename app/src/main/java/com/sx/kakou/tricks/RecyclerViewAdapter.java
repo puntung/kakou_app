@@ -1,47 +1,40 @@
 package com.sx.kakou.tricks;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.sx_kakou.R;
 import com.google.gson.JsonArray;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.List;
-import java.util.Random;
 
 /**
  * Created by mglory on 2015/8/13.
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private Context mContext;
     private JsonArray marray;
-    private PullLoadMoreRecyclerView mPullLoadMoreRecyclerView;
     ImageLoader imageLoader;
     private MyItemClickListener mItemClickListener;
     public JsonArray getDataList(){
         return  marray;
     }
-    public RecyclerViewAdapter(Context context, PullLoadMoreRecyclerView pullLoadMoreRecyclerView,JsonArray marray) {
-        this.marray = marray;
-        mContext = context;
-        imageLoader = ImageLoader.getInstance();
-        mPullLoadMoreRecyclerView = pullLoadMoreRecyclerView;
+    public void setDataList(JsonArray jsonArray){
+        this.marray = jsonArray;
     }
 
-    public void setMyItemClickListener(MyItemClickListener listener){
-        this.mItemClickListener = listener;
+    public RecyclerViewAdapter() {
+        imageLoader = ImageLoader.getInstance();
     }
+
+
 
     public  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public View rootView;
@@ -53,7 +46,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView csys;
         public TextView hpys;
         public int position;
-        public ViewHolder(View itemView,MyItemClickListener listener) {
+        public ViewHolder(View itemView) {
             super(itemView);
             carinfo_img = (ImageView) itemView.findViewById(R.id.h_catinfo_img);
             hphm = (TextView)itemView.findViewById(R.id.h_hphm);
@@ -77,7 +70,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)  {
         View view;
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_hsty_carinfo, parent, false);
-        return new ViewHolder(view,mItemClickListener);
+        return new ViewHolder(view);
     }
 
 
@@ -90,7 +83,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //这里更新数据
         try{
             JSONObject mobject = new JSONObject(marray.get(position).toString());
-            imageLoader.displayImage(mobject.getString("imgurl"),holder.carinfo_img);
+            imageLoader.displayImage(mobject.getString("imgurl"),holder.carinfo_img,getImageLoaderOpt());
             holder.hphm.setText(mobject.getString("hphm"));
             holder.jgsj.setText(mobject.getString("jgsj").substring(0,10));
             holder.cllx.setText(mobject.getString("cllx"));
@@ -111,5 +104,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public interface MyItemClickListener{
          void OnItemClick(int position);
+    }
+
+    /*
+   * Imageloader的配置
+   *
+   * */
+    public DisplayImageOptions getImageLoaderOpt(){
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .showStubImage(R.drawable.board_gray) //加载时显示的页面
+                .showImageForEmptyUri(R.drawable.board_gray)
+                .showImageOnFail(R.drawable.board_gray)
+                        //.delayBeforeLoading(400) //设置下载前延时时间
+                .cacheInMemory(true)
+                .cacheOnDisc(true)
+                .displayer(new FadeInBitmapDisplayer(100)) // 设置加载后渐入动画时间
+                .build();
+        return options;
     }
 }

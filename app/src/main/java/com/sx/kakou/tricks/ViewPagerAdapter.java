@@ -18,6 +18,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.square.github.restrofit.Constants;
 import com.square.github.restrofit.KakouClient;
 import com.square.github.restrofit.ServiceGenerator;
@@ -132,32 +133,32 @@ public class ViewPagerAdapter extends PagerAdapter {
             }
         });
     }
-        //加载更多信息
-        public void getCarinfosList(final int mCount) {
-        KakouClient client = ServiceGenerator.createService(KakouClient.class,Constants.BASE_URL);
-        String  place = mPreference.getString("kakou_place_code","");
-        String  fxbh = mPreference.getString("kakou_fxbh_code", "");
-        String  hpys = mPreference.getString("kakou_hpys", "").substring(0, 1);
-        final String  st = mPreference.getString("kakou_st", "");
-        String et = mPreference.getString("kakou_et", "");
-        String queryStr = "粤LD%+st:"+st+"+et:"+et+"+place:"+place+"+fxbh:"+fxbh+"+hpys:"+hpys+"+ppdm:114&page=" + mCount + "&per_page=20&sort=ppdm&order=desc";
-        client.getCarInfosList(queryStr, new Callback<JsonObject>() {
-            @Override
-            public void success(JsonObject jsonObject, retrofit.client.Response response) {
-                JsonArray iarray = jsonObject.get("items").getAsJsonArray();
-                if (iarray.size()>0){
-
-                }else {
-                    Toast.makeText(context,"没有新数据", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                retrofitError.printStackTrace();
-            }
-        });
-    }
+//        //加载更多信息
+//        public void getCarinfosList(final int mCount) {
+//        KakouClient client = ServiceGenerator.createService(KakouClient.class,Constants.BASE_URL);
+//        String  place = mPreference.getString("kakou_place_code","");
+//        String  fxbh = mPreference.getString("kakou_fxbh_code", "");
+//        String  hpys = mPreference.getString("kakou_hpys", "").substring(0, 1);
+//        final String  st = mPreference.getString("kakou_st", "");
+//        String et = mPreference.getString("kakou_et", "");
+//        String queryStr = "粤LD%+st:"+st+"+et:"+et+"+place:"+place+"+fxbh:"+fxbh+"+hpys:"+hpys+"+ppdm:114&page=" + mCount + "&per_page=20&sort=ppdm&order=desc";
+//        client.getCarInfosList(queryStr, new Callback<JsonObject>() {
+//            @Override
+//            public void success(JsonObject jsonObject, retrofit.client.Response response) {
+//                JsonArray iarray = jsonObject.get("items").getAsJsonArray();
+//                if (iarray.size()>0){
+//
+//                }else {
+//                    Toast.makeText(context,"没有新数据", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void failure(RetrofitError retrofitError) {
+//                retrofitError.printStackTrace();
+//            }
+//        });
+//    }
 
     /*
     * Imageloader的配置
@@ -168,9 +169,10 @@ public class ViewPagerAdapter extends PagerAdapter {
                 .showStubImage(R.drawable.board_gray) //加载时显示的页面
                 .showImageForEmptyUri(R.drawable.board_gray)
                 .showImageOnFail(R.drawable.board_gray)
-                .delayBeforeLoading(400)
+                //.delayBeforeLoading(400) //设置下载前延时时间
                 .cacheInMemory(true)
-                .cacheOnDisc(false)
+                .cacheOnDisc(true)
+                .displayer(new FadeInBitmapDisplayer(100)) // 设置加载后渐入动画时间
                 .build();
         return options;
     }

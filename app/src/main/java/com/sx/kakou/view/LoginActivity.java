@@ -25,6 +25,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 public class LoginActivity extends Activity implements OnClickListener{
 	private Button btn_login;
 	private EditText et_username;
@@ -47,9 +49,9 @@ public class LoginActivity extends Activity implements OnClickListener{
 		// TODO Auto-generated method stub
 		if (et_username.getText().toString().equals("") || et_password.getText().toString().equals("")) {
 			Toast.makeText(this, "用户名或者密码不能为空", Toast.LENGTH_SHORT).show();
-			return;
+		}else{
+			Login();
 		}
-		Login();
 	}
 	
 	public void Login(){
@@ -61,20 +63,64 @@ public class LoginActivity extends Activity implements OnClickListener{
 		KakouClient client = ServiceGenerator.createService(KakouClient.class, Constants.BASE_URL);
 		System.out.println(object.toString());
 		client.login(object, new Callback<JsonObject>() {
-			
+
 			@Override
 			public void success(JsonObject arg0, Response arg1) {
 				int user_id = Integer.parseInt(arg0.get("user_id").toString());
 				startActivity(new Intent(LoginActivity.this,MainActivity.class).putExtra("user_id",user_id));
 				progressDialog.dismiss();
 			}
-			
+
 			@Override
 			public void failure(RetrofitError arg0) {
-				System.out.println(arg0.getMessage());
-				System.out.println(arg0.getBody());
-				Toast.makeText(LoginActivity.this, "验证失败", Toast.LENGTH_SHORT).show();
-				progressDialog.dismiss();
+				arg0.printStackTrace();
+                // 401 IP not authorize
+                //403 服务  forbiden
+				//ECONNREFUSED  //安全客户端没开
+                // unauthrion 密码错误
+                try{
+                    System.out.println("for--->"+arg0.getMessage());
+                    if (arg0!=null){
+//						System.out.println(arg0.getBody().toString());
+//                        JSONObject errobject = new JSONObject(arg0.getBody().toString());
+//                        String errStr = errobject.getString("message");
+                        String errStr = arg0.getMessage().toString();
+                        switch (errStr){
+                            case "401 Unauthorized":
+                                Toast.makeText(LoginActivity.this, "账号或密码错误或限制访问", Toast.LENGTH_SHORT).show();
+                                break;
+                            case "401 IP not authorized":
+                                Toast.makeText(LoginActivity.this, "IP限制访问", Toast.LENGTH_SHORT).show();
+                                break;
+                            case "403 Forbidden":
+                                Toast.makeText(LoginActivity.this, "用户禁止访问", Toast.LENGTH_SHORT).show();
+                                break;
+                            case "403 ECONNREFUSED":
+                                Toast.makeText(LoginActivity.this, "请检查安全客户端是否开启", Toast.LENGTH_SHORT).show();
+                                break;
+                            case "ETIMEDOUT":
+                                Toast.makeText(LoginActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                Toast.makeText(LoginActivity.this,"其他错误:"+errStr, Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    }else {
+//                        System.out.println(arg0.getMessage());
+//                        if (arg0.getMessage().contains("ECONNREFUSED")){
+//                            Toast.makeText(LoginActivity.this, "请检查安全客户端是否开启", Toast.LENGTH_SHORT).show();
+//                        }else if (arg0.getMessage().contains("ETIMEDOUT")){
+//                            Toast.makeText(LoginActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
+//                        }else {
+//                            Toast.makeText(LoginActivity.this, "未知错误", Toast.LENGTH_SHORT).show();
+//                        }
+
+                    }
+
+                    progressDialog.dismiss();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 			}
 		});
 	}

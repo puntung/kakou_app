@@ -9,7 +9,7 @@
     <color name="orange">#FF9322</color>
     <color name="grey2">#B9BCC1</color>
     <color name="theme_blue">#0ACAFA</color>
-    <color name="background">#E6E6E6</color>
+    <color name="background">#F0EFF7</color> <!--E6E6E6-->
     <color name="popupwindowbg">#EBEAF0</color>
     <color name="darkblue">#1083D4</color>
 </resources>

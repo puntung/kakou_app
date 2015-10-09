@@ -20,11 +20,13 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.JsonReader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -57,7 +59,8 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
     private TextView t_hpys;
     private TextView t_st;
     private TextView t_et;
-    private ImageView img_go;
+    private EditText e_hphm;
+    private TextView img_go;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -66,14 +69,16 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
         mPreference = getActivity().getSharedPreferences("config", Context.MODE_PRIVATE);
         mPullLoadMoreRecyclerView = (PullLoadMoreRecyclerView) view.findViewById(R.id.pullLoadMoreRecyclerView);
         //mPullLoadMoreRecyclerView.setRefreshing(true);
-        getCarinfosList(mCount);
+        //getCarinfosList(mCount);
 
+        mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
         t_place = (TextView)view.findViewById(R.id.fh_place);
         t_fxhb = (TextView)view.findViewById(R.id.fh_fxhb);
         t_hpys = (TextView)view.findViewById(R.id.fh_hpys);
         t_st = (TextView)view.findViewById(R.id.fh_st);
         t_et = (TextView)view.findViewById(R.id.fh_et);
-        img_go = (ImageView)view.findViewById(R.id.fh_nav_go);
+        e_hphm = (EditText)view.findViewById(R.id.fh_hphm);
+        img_go = (TextView)view.findViewById(R.id.fh_nav_go);
         initDate();
         t_place.setOnClickListener(this);
         t_fxhb.setOnClickListener(this);
@@ -139,6 +144,7 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
                 break;
             case R.id.fh_nav_go:
                 mPullLoadMoreRecyclerView.setRefreshing(true);
+                mRecyclerViewAdapter = null;
                 SaveNavDate();
                 setRefresh();
                 getCarinfosList(mCount);
@@ -156,9 +162,12 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
             String  kakou_fxbh_code = Integer.parseInt(t_fxhb.getTag().toString())+1+"";
             editor.putString("kakou_fxbh_code",kakou_fxbh_code);
         }
+
+
         editor.putString("kakou_place",t_place.getText().toString());
         editor.putString("kakou_fxbh",t_fxhb.getText().toString());
         editor.putString("kakou_hpys",t_hpys.getText().toString());
+        editor.putString("kakou_hphm",e_hphm.getText().toString());
         editor.putString("kakou_st",t_st.getText().toString());
         editor.putString("kakou_et",t_et.getText().toString());
         editor.commit();
@@ -167,14 +176,14 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
         ChangeDateDialog mChangeBirthDialog = new ChangeDateDialog(
                 getActivity());
         Calendar calendar = Calendar.getInstance();
-        mChangeBirthDialog.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DAY_OF_MONTH));
+        mChangeBirthDialog.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DAY_OF_MONTH),calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE));
         mChangeBirthDialog.show();
         mChangeBirthDialog.setDateListener(new ChangeDateDialog.OnDateListener() {
 
             @Override
-            public void onClick(String year, String month, String day) {
+            public void onClick(String year, String month, String day,String hour,String minute) {
                 // TODO Auto-generated method stub
-                String date = year + "-" + month + "-" + day;
+                String date = year + "-" + month + "-" + day + " "+hour+":"+minute+":0";
 
                 if (view.getId() == R.id.fh_et){
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -231,13 +240,15 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
                 }
             }
         });
-        WindowManager wm = getActivity().getWindowManager();
-        popupWindow = new PopupWindow(contentView, 200,
-                300);
+        //WindowManager wm = getActivity().getWindowManager();
+        popupWindow = new PopupWindow();
+        popupWindow.setContentView(contentView);
+        popupWindow.setWidth(200);
+        popupWindow.setHeight(300);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setOutsideTouchable(true);
         popupWindow.setFocusable(true);
-        popupWindow.showAsDropDown(v,-40,20);
+        popupWindow.showAsDropDown(v, -40, 20);
 
         WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
         params.alpha = 0.7f;
@@ -281,11 +292,14 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
         client.getPlace(new Callback<JsonObject>() {
             @Override
             public void failure(RetrofitError retrofitError) {
-                retrofitError.printStackTrace();
+                //System.out.println("err"+retrofitError.getBody());
+               retrofitError.printStackTrace();
+                Toast.makeText(getActivity(),"抱歉！出现了异常，请与开发者联系",Toast.LENGTH_SHORT).show();
             }
             @Override
             public void success(JsonObject arg0, Response arg1) {
                 try {
+                    System.out.println("for--->"+arg0.toString());
                     List<String> mplace = new ArrayList<>();
                     JSONArray array = new JSONArray(arg0.get("items").toString());
                     for (int i = 0; i < array.length(); i++) {
@@ -321,16 +335,21 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
             @Override
             public void failure(RetrofitError retrofitError) {
                 retrofitError.printStackTrace();
+                Toast.makeText(getActivity(),"抱歉！出现了异常，请与开发者联系",Toast.LENGTH_SHORT).show();
             }
         });
     }
         public void getCarinfosList(final int mCount) {
             String  place = mPreference.getString("kakou_place_code","");
             String  fxbh = mPreference.getString("kakou_fxbh_code", "");
-            String  hpys = mPreference.getString("kakou_hpys", "").substring(0, 1);
+            String  hpys = mPreference.getString("kakou_hpys", "");
+            String  hphm = mPreference.getString("kakou_hphm","");
+            if (!hpys.equals("")){
+                hpys = hpys.substring(0, 1);
+            }
             final String  st = mPreference.getString("kakou_st", "");
             String et = mPreference.getString("kakou_et", "");
-            String queryStr = "粤LD%+st:"+st+"+et:"+et+"+place:"+place+"+fxbh:"+fxbh+"+hpys:"+hpys+"+ppdm:114&page=" + mCount + "&per_page=20&sort=ppdm&order=desc";
+            String queryStr = hphm+"%+st:"+st+"+et:"+et+"+place:"+place+"+fxbh:"+fxbh+"+hpys:"+hpys+"+ppdm:114&page=" + mCount + "&per_page=20&sort=ppdm&order=desc";
             client.getCarInfosList(queryStr, new Callback<JsonObject>() {
                 @TargetApi(Build.VERSION_CODES.KITKAT)
                 @Override
@@ -339,7 +358,8 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
                     if (iarray.size()!=0){
                         try {
                             if (mRecyclerViewAdapter == null) {
-                                mRecyclerViewAdapter = new RecyclerViewAdapter(getActivity(), mPullLoadMoreRecyclerView, iarray);
+                                mRecyclerViewAdapter = new RecyclerViewAdapter();
+                                mRecyclerViewAdapter.setDataList(iarray);
                                 marray = mRecyclerViewAdapter.getDataList();
                                 setOnItemClickListener(mRecyclerViewAdapter);
                                 mPullLoadMoreRecyclerView.setAdapter(mRecyclerViewAdapter);
@@ -360,7 +380,9 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
 
                 @Override
                 public void failure(RetrofitError retrofitError) {
+                    retrofitError.printStackTrace();
                     System.out.println("failure");
+                    Toast.makeText(getActivity(),"抱歉！出现了异常，请与开发者联系",Toast.LENGTH_SHORT).show();
                 }
             });
         }

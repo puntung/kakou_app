@@ -11,6 +11,7 @@
         android:orientation="horizontal"
         android:gravity="right">
         <ImageView
+            android:id="@+id/setup_close"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/close_selector"
@@ -18,8 +19,101 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="5dp"/>
     </LinearLayout>
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Setting"/>
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        android:background="@drawable/corners_white">
+        <LinearLayout
+            android:id="@+id/setup_about"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center|left"
+            android:clickable="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="关于卡口"
+                android:textSize="14sp"
+                android:drawableRight="@drawable/skin_icon_arrow_right"
+                />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/background"/>
+        <LinearLayout
+            android:id="@+id/setup_update"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center|left"
+            android:clickable="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="软件更新"
+                android:textSize="14sp"
+                android:drawableRight="@drawable/skin_icon_arrow_right"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:background="@drawable/corners_white">
+        <RelativeLayout
+            android:id="@+id/setup_cache"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center|left"
+            android:clickable="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="清理缓存"
+                android:textSize="14sp"
+                />
+            <TextView
+                android:id="@+id/setup_size_cache"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/font_grey"
+                android:textSize="14sp"
+                android:text="0M"/>
+        </RelativeLayout>
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/setup_logout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/corners_white">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="退出登陆"
+                android:textSize="14sp"
+                />
+    </LinearLayout>
 </LinearLayout>

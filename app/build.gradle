@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.sx_kakou"
-        minSdkVersion 17
+        minSdkVersion 11
         targetSdkVersion 22
     }
 

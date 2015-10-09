@@ -28,6 +28,8 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 	private WheelView wvYear;
 	private WheelView wvMonth;
 	private WheelView wvDay;
+	private WheelView wvHour;
+	private WheelView wvMinute;
 
 	private View vChangeDate;
 	private View vChangeDateChild;
@@ -37,9 +39,13 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 	private ArrayList<String> arry_years = new ArrayList<String>();
 	private ArrayList<String> arry_months = new ArrayList<String>();
 	private ArrayList<String> arry_days = new ArrayList<String>();
+	private ArrayList<String> arry_Hours = new ArrayList<String>();
+	private ArrayList<String> arry_Minutes = new ArrayList<String>();
 	private CalendarTextAdapter mYearAdapter;
 	private CalendarTextAdapter mMonthAdapter;
 	private CalendarTextAdapter mDaydapter;
+	private CalendarTextAdapter mHourdapter;
+	private CalendarTextAdapter mMinutedapter;
 
 	private int month;
 	private int day;
@@ -47,6 +53,8 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 	private int currentYear = getYear();
 	private int currentMonth = 1;
 	private int currentDay = 1;
+	private int currentHour = 0;
+	private int currentMinute = 0;
 
 	private int maxTextSize = 24;
 	private int minTextSize = 14;
@@ -56,6 +64,9 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 	private String selectYear;
 	private String selectMonth;
 	private String selectDay;
+	private String selectHour;
+	private String selectMinute;
+
 
 	private OnDateListener onDateListener;
 
@@ -71,6 +82,8 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 		wvYear = (WheelView) findViewById(R.id.wv_date_year);
 		wvMonth = (WheelView) findViewById(R.id.wv_date_month);
 		wvDay = (WheelView) findViewById(R.id.wv_date_day);
+		wvHour = (WheelView) findViewById(R.id.wv_date_hour);
+		wvMinute = (WheelView) findViewById(R.id.wv_date_minute);
 
 		vChangeDate = findViewById(R.id.ly_myinfo_changedate);
 		vChangeDateChild = findViewById(R.id.ly_myinfo_changedate_child);
@@ -103,39 +116,52 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 		wvDay.setViewAdapter(mDaydapter);
 		wvDay.setCurrentItem(currentDay - 1);
 
+        initHours();
+        mHourdapter = new CalendarTextAdapter(context, arry_Hours, currentHour, maxTextSize, minTextSize);
+        wvHour.setVisibleItems(5);
+        wvHour.setViewAdapter(mHourdapter);
+        wvHour.setCurrentItem(currentHour);
+
+        initMinutes();
+        mMinutedapter = new CalendarTextAdapter(context, arry_Minutes, currentMinute, maxTextSize, minTextSize);
+        wvMinute.setVisibleItems(5);
+        wvMinute.setViewAdapter(mMinutedapter);
+        wvMinute.setCurrentItem(currentMinute);
+
+
 		wvYear.addChangingListener(new OnWheelChangedListener() {
 
-			@Override
-			public void onChanged(WheelView wheel, int oldValue, int newValue) {
-				// TODO Auto-generated method stub
-				String currentText = (String) mYearAdapter.getItemText(wheel.getCurrentItem());
-				selectYear = currentText;
-				setTextviewSize(currentText, mYearAdapter);
-				currentYear = Integer.parseInt(currentText);
-				setYear(currentYear);
-				initMonths(month);
-				mMonthAdapter = new CalendarTextAdapter(context, arry_months, 0, maxTextSize, minTextSize);
-				wvMonth.setVisibleItems(5);
-				wvMonth.setViewAdapter(mMonthAdapter);
-				wvMonth.setCurrentItem(0);
-			}
-		});
+            @Override
+            public void onChanged(WheelView wheel, int oldValue, int newValue) {
+                // TODO Auto-generated method stub
+                String currentText = (String) mYearAdapter.getItemText(wheel.getCurrentItem());
+                selectYear = currentText;
+                setTextviewSize(currentText, mYearAdapter);
+                currentYear = Integer.parseInt(currentText);
+                setYear(currentYear);
+                initMonths(month);
+                mMonthAdapter = new CalendarTextAdapter(context, arry_months, 0, maxTextSize, minTextSize);
+                wvMonth.setVisibleItems(5);
+                wvMonth.setViewAdapter(mMonthAdapter);
+                wvMonth.setCurrentItem(0);
+            }
+        });
 
 		wvYear.addScrollingListener(new OnWheelScrollListener() {
 
-			@Override
-			public void onScrollingStarted(WheelView wheel) {
-				// TODO Auto-generated method stub
+            @Override
+            public void onScrollingStarted(WheelView wheel) {
+                // TODO Auto-generated method stub
 
-			}
+            }
 
-			@Override
-			public void onScrollingFinished(WheelView wheel) {
-				// TODO Auto-generated method stub
-				String currentText = (String) mYearAdapter.getItemText(wheel.getCurrentItem());
-				setTextviewSize(currentText, mYearAdapter);
-			}
-		});
+            @Override
+            public void onScrollingFinished(WheelView wheel) {
+                // TODO Auto-generated method stub
+                String currentText = (String) mYearAdapter.getItemText(wheel.getCurrentItem());
+                setTextviewSize(currentText, mYearAdapter);
+            }
+        });
 
 		wvMonth.addChangingListener(new OnWheelChangedListener() {
 
@@ -197,6 +223,63 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 			}
 		});
 
+        wvHour.addChangingListener(new OnWheelChangedListener() {
+
+            @Override
+            public void onChanged(WheelView wheel, int oldValue, int newValue) {
+                // TODO Auto-generated method stub
+                String currentText = (String) mHourdapter.getItemText(wheel.getCurrentItem());
+                setTextviewSize(currentText, mHourdapter);
+                selectHour = currentText;
+            }
+        });
+
+        wvHour.addScrollingListener(new OnWheelScrollListener() {
+
+            @Override
+            public void onScrollingStarted(WheelView wheel) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onScrollingFinished(WheelView wheel) {
+                // TODO Auto-generated method stub
+                String currentText = (String) mHourdapter.getItemText(wheel.getCurrentItem());
+                setTextviewSize(currentText, mHourdapter);
+            }
+        });
+
+        wvMinute.addChangingListener(new OnWheelChangedListener() {
+
+            @Override
+            public void onChanged(WheelView wheel, int oldValue, int newValue) {
+                // TODO Auto-generated method stub
+                String currentText = (String) mMinutedapter.getItemText(wheel.getCurrentItem());
+                setTextviewSize(currentText, mMinutedapter);
+                selectMinute = currentText;
+            }
+        });
+
+        wvMinute.addScrollingListener(new OnWheelScrollListener() {
+
+            @Override
+            public void onScrollingStarted(WheelView wheel) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onScrollingFinished(WheelView wheel) {
+                // TODO Auto-generated method stub
+                String currentText = (String) mMinutedapter.getItemText(wheel.getCurrentItem());
+                setTextviewSize(currentText, mMinutedapter);
+            }
+        });
+
+
+
+
 	}
 
 	public void initYears() {
@@ -216,6 +299,20 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 		arry_days.clear();
 		for (int i = 1; i <= days; i++) {
 			arry_days.add(i + "");
+		}
+	}
+
+	public void initHours() {
+		arry_Hours.clear();
+		for (int i = 0; i <= 24; i++) {
+			arry_Hours.add(i + "");
+		}
+	}
+
+	public void initMinutes() {
+		arry_Minutes.clear();
+		for (int i = 0; i <= 60; i++) {
+			arry_Minutes.add(i + "");
 		}
 	}
 
@@ -254,7 +351,7 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 
 		if (v == btnSure) {
 			if (onDateListener != null) {
-				onDateListener.onClick(selectYear, selectMonth, selectDay);
+				onDateListener.onClick(selectYear, selectMonth, selectDay,selectHour,selectMinute);
 			}
 		} else if (v == btnSure) {
 
@@ -268,7 +365,7 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 	}
 
 	public interface OnDateListener {
-		public void onClick(String year, String month, String day);
+		public void onClick(String year, String month, String day,String hour,String minute);
 	}
 
 	/**
@@ -307,8 +404,18 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 		return c.get(Calendar.DATE);
 	}
 
+	public int getHour() {
+		Calendar c = Calendar.getInstance();
+		return c.get(Calendar.HOUR_OF_DAY);
+	}
+
+	public int getMinute() {
+		Calendar c = Calendar.getInstance();
+		return c.get(Calendar.MINUTE);
+	}
+
 	public void initData() {
-		setDate(getYear(), getMonth(), getDay());
+		setDate(getYear(), getMonth(), getDay(),getHour(),getMinute());
 		this.currentDay = 1;
 		this.currentMonth = 1;
 	}
@@ -320,14 +427,18 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 	 * @param month
 	 * @param day
 	 */
-	public void setDate(int year, int month, int day) {
+	public void setDate(int year, int month, int day,int hour,int minute) {
 		selectYear = year + "";
 		selectMonth = month + "";
 		selectDay = day + "";
+		selectHour = hour+"";
+		selectMinute = minute+"";
 		issetdata = true;
 		this.currentYear = year;
 		this.currentMonth = month;
 		this.currentDay = day;
+		this.currentHour = hour;
+		this.currentMinute = minute;
 		if (year == getYear()) {
 			this.month = getMonth();
 		} else {

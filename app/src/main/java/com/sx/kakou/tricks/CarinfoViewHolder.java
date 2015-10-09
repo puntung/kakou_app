@@ -1,13 +1,10 @@
 package com.sx.kakou.tricks;
-
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.sx_kakou.R;
 
-import org.json.JSONObject;
 
 /**
  * Created by mglory on 2015/7/31.

@@ -6,11 +6,14 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sx_kakou.R;
+import com.sx.kakou.tricks.ImageTouchView;
 import com.sx.kakou.tricks.ViewPagerAdapter;
 import org.json.JSONArray;
 
@@ -29,12 +32,12 @@ public class HistoryItemActivity extends Activity implements View.OnClickListene
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_history_item);
         init();
-        System.out.println(position);
+
     }
 
     public void init(){
         intentdata = getIntent().getStringExtra("data");
-        position = getIntent().getIntExtra("position",-1);
+        position = getIntent().getIntExtra("position", -1);
         count = getIntent().getIntExtra("count", -1);
         mViewPager = (ViewPager)findViewById(R.id.viewpager);
         try {
@@ -57,4 +60,5 @@ public class HistoryItemActivity extends Activity implements View.OnClickListene
                 break;
         }
     }
+
 }

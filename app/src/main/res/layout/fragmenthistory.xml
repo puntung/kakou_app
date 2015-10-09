@@ -8,84 +8,102 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/tab"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         >
         <TextView
             android:id="@+id/fh_place"
             android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="卡口地点"
             android:gravity="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_margin="10dp"
             android:textColor="@color/font_grey"
-            android:drawableLeft="@drawable/hsty_navigation_place"
-            android:drawablePadding="10dp"
+            android:background="@drawable/corners_bg"
             />
         <TextView
             android:id="@+id/fh_fxhb"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="方向"
             android:gravity="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_margin="10dp"
             android:textColor="@color/font_grey"
-            android:drawableLeft="@drawable/hsty_navigation_fxhb"
-            android:drawablePadding="10dp"
+            android:background="@drawable/corners_bg"
             />
         <TextView
             android:id="@+id/fh_hpys"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="号牌颜色"
             android:gravity="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_margin="10dp"
             android:textColor="@color/font_grey"
-            android:drawableLeft="@drawable/hsty_navigation_hpys"
-            android:drawablePadding="10dp"
+            android:background="@drawable/corners_bg"
             />
         <TextView
             android:id="@+id/fh_st"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_width="140dp"
+            android:layout_height="35dp"
             android:text="起始时间"
             android:gravity="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_margin="10dp"
             android:textColor="@color/font_grey"
-            android:drawablePadding="10dp"
+            android:background="@drawable/corners_bg"
             />
         <TextView
             android:id="@+id/fh_et"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_width="140dp"
+            android:layout_height="35dp"
             android:text="结束时间"
             android:gravity="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_margin="10dp"
             android:textColor="@color/font_grey"
-            android:drawablePadding="10dp"
+            android:background="@drawable/corners_bg"
             />
+
+        <EditText
+            android:id="@+id/fh_hphm"
+            android:layout_width="140dp"
+            android:layout_height="35dp"
+            android:hint="号牌号码"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:singleLine="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/corners_bg"
+            />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right|center_horizontal"
             >
-            <ImageView
+            <TextView
                 android:id="@+id/fh_nav_go"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/navigationbar_go_selector"
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                android:text="确定"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_blue_selector"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="10dp"/>
 
         </LinearLayout>
+
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/background"/>
+
     <com.sx.kakou.tricks.PullLoadMoreRecyclerView
         android:id="@+id/pullLoadMoreRecyclerView"
         android:layout_width="match_parent"

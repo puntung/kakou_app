@@ -95,7 +95,7 @@ public class LoginActivity extends Activity implements OnClickListener{
                             case "403 Forbidden":
                                 Toast.makeText(LoginActivity.this, "用户禁止访问", Toast.LENGTH_SHORT).show();
                                 break;
-                            case "403 ECONNREFUSED":
+                            case "failed to connect to /127.0.0.1 (port 8060): connect failed: ECONNREFUSED (Connection refused)":
                                 Toast.makeText(LoginActivity.this, "请检查安全客户端是否开启", Toast.LENGTH_SHORT).show();
                                 break;
                             case "ETIMEDOUT":

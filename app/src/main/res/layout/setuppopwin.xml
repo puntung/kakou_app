@@ -19,11 +19,31 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="5dp"/>
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="20dp">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/app_icon"/>
+        <TextView
+            android:id="@+id/setup_appversion"
+            android:layout_marginTop="10dp"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/font_grey"
+            android:text="版本信息"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical"
         android:background="@drawable/corners_white">
         <LinearLayout

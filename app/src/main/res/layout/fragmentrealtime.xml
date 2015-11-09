@@ -30,56 +30,82 @@
             android:id="@+id/rt_tv_fxhb"
             android:textSize="16sp"
             android:textColor="@drawable/navigatiion_fontcolor_selector"
-            android:text="@string/fxhb"
+            android:text="@string/fxbh"
             android:layout_marginLeft="20dp"
             android:gravity="center"
             android:focusable="true"
-            />
-        <!--
-        <TextView
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/rt_tv_csys"
-            android:textSize="16sp"
-            android:textColor="@drawable/navigatiion_fontcolor_selector"
-            android:text="@string/csys"
-            android:layout_marginLeft="20dp"
-            android:gravity="center"
-            android:focusable="true"
-            />
-        -->
-        <EditText
-            android:id="@+id/rt_et_hphm"
-            android:layout_width="140dp"
-            android:layout_height="35dp"
-            android:hint="号牌号码"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:background="@drawable/corners_bg"
             />
 
         <TextView
-            android:id="@+id/rt_tv_control"
-            android:layout_width="100dp"
+            android:id="@+id/rt_tv_auto"
+            android:layout_width="130dp"
             android:layout_height="35dp"
-            android:text="立即监控"
+            android:text="正在刷新中"
             android:textSize="16sp"
             android:gravity="center"
             android:layout_marginLeft="20dp"
             android:background="@drawable/btn_blue_selector"
-            android:textColor="@color/white" />
-
+            android:textColor="@color/white"
+            />
+        <ImageView
+            android:id="@+id/rt_img_waiting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:src="@drawable/img_waiting"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"/>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/background"/>
+    <LinearLayout
+        android:id="@+id/rt_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:text="@string/hphm"
+            android:textSize="14sp"
+            android:gravity="center"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:text="@string/jgsj"
+            android:textSize="14sp"
+            android:gravity="center"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:text="@string/place"
+            android:textSize="14sp"
+            android:gravity="center"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:text="@string/fxbh"
+            android:textSize="14sp"
+            android:gravity="center"
+            />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_gravity="center">
             <com.sx.kakou.tricks.PullLoadMoreRecyclerView
                 android:id ="@+id/home_swip"
                 android:layout_width="0dp"
@@ -87,14 +113,6 @@
                 android:layout_height="match_parent"
                 >
             </com.sx.kakou.tricks.PullLoadMoreRecyclerView>
-            <android.support.v7.widget.RecyclerView
-                android:id ="@+id/control_swip"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-               >
-            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
 

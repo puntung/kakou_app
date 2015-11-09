@@ -1,27 +1,23 @@
 package com.sx.kakou.view;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.example.sx_kakou.R;
-import com.sx.kakou.tricks.ImageTouchView;
 import com.sx.kakou.tricks.ViewPagerAdapter;
+import com.sx.kakou.tricks.ViewPagerFixed;
+
 import org.json.JSONArray;
 
 public class HistoryItemActivity extends Activity implements View.OnClickListener{
 
-    private ViewPager mViewPager;
+    private ViewPagerFixed mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
-    private static   TextView back;
+    private static LinearLayout back;
     private static String intentdata;
     private static  int count;
     private static int position;
@@ -39,7 +35,7 @@ public class HistoryItemActivity extends Activity implements View.OnClickListene
         intentdata = getIntent().getStringExtra("data");
         position = getIntent().getIntExtra("position", -1);
         count = getIntent().getIntExtra("count", -1);
-        mViewPager = (ViewPager)findViewById(R.id.viewpager);
+        mViewPager = (ViewPagerFixed)findViewById(R.id.viewpager);
         try {
             JSONArray dataArray = new JSONArray(intentdata);
             mViewPagerAdapter = new ViewPagerAdapter(this,dataArray,count);
@@ -48,7 +44,7 @@ public class HistoryItemActivity extends Activity implements View.OnClickListene
         }
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setCurrentItem(position);
-        back = (TextView)findViewById(R.id.ah_back);
+        back = (LinearLayout)findViewById(R.id.ah_back);
         back.setOnClickListener(this);
     }
 

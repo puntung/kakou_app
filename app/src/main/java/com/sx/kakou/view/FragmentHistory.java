@@ -14,6 +14,7 @@ import com.sx.kakou.tricks.RecyclerViewAdapter;
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -48,6 +49,7 @@ import retrofit.client.Response;
 
 public class FragmentHistory extends Fragment implements View.OnClickListener{
     private PullLoadMoreRecyclerView mPullLoadMoreRecyclerView;
+    private ProgressDialog progressDialog = null;
     private  KakouClient client ;
 	private int mCount = 1;
     private  JsonArray marray = new JsonArray();
@@ -79,6 +81,7 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
         t_et = (TextView)view.findViewById(R.id.fh_et);
         e_hphm = (EditText)view.findViewById(R.id.fh_hphm);
         img_go = (TextView)view.findViewById(R.id.fh_nav_go);
+
         initDate();
         t_place.setOnClickListener(this);
         t_fxhb.setOnClickListener(this);
@@ -128,13 +131,13 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.fh_place:
-                getPlace(v);
+                showPopupWindowArea(MainActivity.place_code_list, MainActivity.place_list, t_place, v);
                 break;
             case R.id.fh_fxhb:
-                getFxbh(v);
+                showPopupWindowArea(MainActivity.fxbh_code_list,MainActivity.fxbh_list, t_fxhb, v);
                 break;
             case R.id.fh_hpys:
-                getHpys(v);
+                showPopupWindowArea(MainActivity.hpys_code_list,MainActivity.hpys_list,t_hpys,v);
                 break;
             case R.id.fh_st:
                 SetDate(t_st);
@@ -143,67 +146,89 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
                 SetDate(t_et);
                 break;
             case R.id.fh_nav_go:
-                mPullLoadMoreRecyclerView.setRefreshing(true);
-                mRecyclerViewAdapter = null;
-                SaveNavDate();
-                setRefresh();
-                getCarinfosList(mCount);
-                mPullLoadMoreRecyclerView.setRefreshing(false);
+                if (t_place.getText().toString().equals(getActivity().getResources().getString(R.string.place))|| t_fxhb.getText().equals(getActivity().getResources().getString(R.string.fxbh))
+                        ||t_hpys.equals(getActivity().getResources().getString(R.string.hpys)) ||t_st.getText().toString().equals(getActivity().getResources().getString(R.string.start_date))
+                        || t_et.getText().equals(getActivity().getResources().getString(R.string.end_date))){
+                    Toast.makeText(getActivity(),"请完整查询条件",Toast.LENGTH_SHORT).show();
+                }else{
+                    progressDialog = ProgressDialog.show(getActivity(), null, "正在加载数据...", true);
+                    progressDialog.setCancelable(false);
+                    mPullLoadMoreRecyclerView.setRefreshing(true);
+                    mRecyclerViewAdapter = null;
+                    SaveNavDate();
+                    setRefresh();
+                    getCarinfosList(mCount);
+                    mPullLoadMoreRecyclerView.setRefreshing(false);
+                }
                 break;
+
         }
     }
     public void SaveNavDate(){
         SharedPreferences.Editor editor = mPreference.edit();
         if(t_place.getTag()!=null){
-            String  kakou_place_code = Integer.parseInt(t_place.getTag().toString())+2+"";
+            String  kakou_place_code = t_place.getTag()+"";
             editor.putString("kakou_place_code",kakou_place_code);
         }
         if (t_fxhb.getTag()!=null){
-            String  kakou_fxbh_code = Integer.parseInt(t_fxhb.getTag().toString())+1+"";
+            String  kakou_fxbh_code = t_fxhb.getTag()+"";
             editor.putString("kakou_fxbh_code",kakou_fxbh_code);
         }
-
-
         editor.putString("kakou_place",t_place.getText().toString());
         editor.putString("kakou_fxbh",t_fxhb.getText().toString());
         editor.putString("kakou_hpys",t_hpys.getText().toString());
         editor.putString("kakou_hphm",e_hphm.getText().toString());
-        editor.putString("kakou_st",t_st.getText().toString());
-        editor.putString("kakou_et",t_et.getText().toString());
+        editor.putString("kakou_st", t_st.getText().toString());
+        editor.putString("kakou_et", t_et.getText().toString());
         editor.commit();
     }
     public void SetDate(final TextView view){
-        ChangeDateDialog mChangeBirthDialog = new ChangeDateDialog(
-                getActivity());
+        try{
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        ChangeDateDialog mChangeDateDialog = new ChangeDateDialog(getActivity());
         Calendar calendar = Calendar.getInstance();
-        mChangeBirthDialog.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DAY_OF_MONTH),calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE));
-        mChangeBirthDialog.show();
-        mChangeBirthDialog.setDateListener(new ChangeDateDialog.OnDateListener() {
+        if (!t_st.getText().toString().equals("起始时间")&& !t_et.getText().toString().equals("结束时间")){
+            calendar.clear();
+            Date text_date = dateFormat.parse(view.getText().toString());
+            calendar.setTime(text_date);
 
+        }
+            mChangeDateDialog.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+            mChangeDateDialog.show();
+        mChangeDateDialog.setDateListener(new ChangeDateDialog.OnDateListener() {
             @Override
-            public void onClick(String year, String month, String day,String hour,String minute) {
-                // TODO Auto-generated method stub
-                String date = year + "-" + month + "-" + day + " "+hour+":"+minute+":0";
-
-                if (view.getId() == R.id.fh_et){
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            public void onClick(String year, String month, String day, String hour, String minute) {
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String date = DateFormat(year) + "-" + DateFormat(month) + "-" + DateFormat(day) + " " + DateFormat(hour) + ":" + DateFormat(minute) + ":" + calendar.get(Calendar.SECOND);
+                if (view.getId() == R.id.fh_et) {
                     try {
                         Date s_date = sdf.parse(t_st.getText().toString());
                         Date e_date = sdf.parse(date);
-                        if (e_date.before(s_date)){
-                            Toast.makeText(getActivity(),"结束时间不可以小于开始时间",Toast.LENGTH_SHORT).show();
-                        }else {
+                        if (e_date.before(s_date)) {
+                            Toast.makeText(getActivity(), "结束时间不可以小于开始时间", Toast.LENGTH_SHORT).show();
+                        } else {
                             view.setText(date);
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                }else {
+                } else {
                     view.setText(date);
                 }
             }
         });
+        }catch (Exception e){e.printStackTrace();}
+    }
+
+    private String DateFormat(String date){
+       int f_date =  Integer.parseInt(date);
+        if (f_date<10){
+            return  "0"+f_date;
+        }else {
+            return f_date+"";
+        }
     }
 
     /**
@@ -216,25 +241,20 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
      * @param v
      *            点击的view
      */
-    public void showPopupWindowArea(final List<String> strs, final TextView textView, View v) {
+    public void showPopupWindowArea(final List<Integer> code ,final List<String> strs, final TextView textView, View v) {
 
         View contentView = LayoutInflater.from(getActivity()).inflate(
                 R.layout.popwin_content_list, null);
-
-        // 要显示的数据
         ListView lv_content = (ListView) contentView
                 .findViewById(R.id.lv_popupwindow_content_Area);
-
         PopupWindowContentAdapter adapter = new PopupWindowContentAdapter(getActivity(), strs);
         lv_content.setAdapter(adapter);
-        // item点击项
         lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 textView.setText(strs.get(position).toString());
-                textView.setTag(position);
+                textView.setTag(code.get(position));
                 if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
@@ -249,11 +269,9 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
         popupWindow.setOutsideTouchable(true);
         popupWindow.setFocusable(true);
         popupWindow.showAsDropDown(v, -40, 20);
-
         WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
         params.alpha = 0.7f;
         getActivity().getWindow().setAttributes(params);
-
         popupWindow.update();
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             public void onDismiss() {
@@ -264,92 +282,26 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
         });
     }
 
-    public void getHpys(final  View view){
-       client.getHpys(new Callback<JsonObject>() {
-           @Override
-           public void success(JsonObject jsonObject, Response response) {
-              try {
-                  List<String> hpys = new ArrayList<>();
-                  JSONArray array = new JSONArray(jsonObject.get("items").toString());
-                  for (int i = 0; i < array.length(); i++) {
-                      JSONObject mobject = new JSONObject(array.get(i).toString());
-                      hpys.add(mobject.getString("name"));
-                  }
-                  showPopupWindowArea(hpys,t_hpys,view);
-              }catch (Exception e){
-                  e.printStackTrace();
-              }
-           }
-
-           @Override
-           public void failure(RetrofitError retrofitError) {
-
-           }
-       });
-    }
-
-    public void getPlace(final View v){
-        client.getPlace(new Callback<JsonObject>() {
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                //System.out.println("err"+retrofitError.getBody());
-               retrofitError.printStackTrace();
-                Toast.makeText(getActivity(),"抱歉！出现了异常，请与开发者联系",Toast.LENGTH_SHORT).show();
-            }
-            @Override
-            public void success(JsonObject arg0, Response arg1) {
-                try {
-                    System.out.println("for--->"+arg0.toString());
-                    List<String> mplace = new ArrayList<>();
-                    JSONArray array = new JSONArray(arg0.get("items").toString());
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject object = new JSONObject(array.get(i).toString());
-                        mplace.add(object.getString("name"));
-                    }
-                    showPopupWindowArea(mplace,t_place,v);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-        });
-    }
-    public void getFxbh(final View view){
-        client.getFxhb(new Callback<JsonObject>() {
-            @Override
-            public void success(JsonObject jsonObject, Response response) {
-                try {
-                    List<String> mfxbh = new ArrayList<>();
-                    JSONArray array = new JSONArray(jsonObject.get("items").toString());
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject object = new JSONObject(array.get(i).toString());
-                        mfxbh.add(object.getString("name"));
-                    }
-                  showPopupWindowArea(mfxbh,t_fxhb,view);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                retrofitError.printStackTrace();
-                Toast.makeText(getActivity(),"抱歉！出现了异常，请与开发者联系",Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
         public void getCarinfosList(final int mCount) {
-            String  place = mPreference.getString("kakou_place_code","");
-            String  fxbh = mPreference.getString("kakou_fxbh_code", "");
-            String  hpys = mPreference.getString("kakou_hpys", "");
+            String  place = "+place:"+ mPreference.getString("kakou_place_code","");
+            if (mPreference.getString("kakou_place_code","").equals("0") ){
+                place = "";
+            }
+            String  fxbh = "+fxbh:"+ mPreference.getString("kakou_fxbh_code", "");
+            if (mPreference.getString("kakou_fxbh_code", "").equals("0") ){
+                fxbh = "";
+            }
+            String  hpys =  mPreference.getString("kakou_hpys", "");
             String  hphm = mPreference.getString("kakou_hphm","");
+            String  ppdm = "";
             if (!hpys.equals("")){
-                hpys = hpys.substring(0, 1);
+                hpys = "+hpys:"+hpys.substring(0, 1);
             }
             final String  st = mPreference.getString("kakou_st", "");
             String et = mPreference.getString("kakou_et", "");
-            String queryStr = hphm+"%+st:"+st+"+et:"+et+"+place:"+place+"+fxbh:"+fxbh+"+hpys:"+hpys+"+ppdm:114&page=" + mCount + "&per_page=20&sort=ppdm&order=desc";
+           // String queryStr = hphm+"%+st:"+st+"+et:"+et+"+place:"+place+"+fxbh:"+fxbh+"+hpys:"+hpys+"+ppdm:114&page=" + mCount + "&per_page=20&sort=ppdm&order=desc";
+            String queryStr = hphm+"%+st:"+st+"+et:"+et+place+fxbh+hpys+ppdm+"&page=" + mCount + "&per_page=20&sort=jgsj&order=desc";
+            System.out.println(queryStr);
             client.getCarInfosList(queryStr, new Callback<JsonObject>() {
                 @TargetApi(Build.VERSION_CODES.KITKAT)
                 @Override
@@ -376,13 +328,14 @@ public class FragmentHistory extends Fragment implements View.OnClickListener{
                         Toast.makeText(getActivity(),"没有新数据",Toast.LENGTH_SHORT).show();
                     }
                     mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+                    progressDialog.dismiss();
                 }
 
                 @Override
                 public void failure(RetrofitError retrofitError) {
                     retrofitError.printStackTrace();
-                    System.out.println("failure");
-                    Toast.makeText(getActivity(),"抱歉！出现了异常，请与开发者联系",Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                    Toast.makeText(getActivity(),"抱歉！出现了异常",Toast.LENGTH_SHORT).show();
                 }
             });
         }

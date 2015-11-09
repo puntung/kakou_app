@@ -291,28 +291,46 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 	public void initMonths(int months) {
 		arry_months.clear();
 		for (int i = 1; i <= months; i++) {
-			arry_months.add(i + "");
+			if (i<10){
+				arry_months.add("0"+i + "");
+			}else {
+				arry_months.add(i + "");
+			}
+
 		}
 	}
 
 	public void initDays(int days) {
 		arry_days.clear();
 		for (int i = 1; i <= days; i++) {
-			arry_days.add(i + "");
+            if (i<10){
+                arry_days.add("0"+i + "");
+            }else {
+                arry_days.add(i + "");
+            }
+
 		}
 	}
 
 	public void initHours() {
 		arry_Hours.clear();
-		for (int i = 0; i <= 24; i++) {
-			arry_Hours.add(i + "");
+		for (int i = 0; i <= 23; i++) {
+            if (i<10){
+                arry_Hours.add("0"+i + "");
+            }else{
+                arry_Hours.add(i + "");
+            }
 		}
 	}
 
 	public void initMinutes() {
 		arry_Minutes.clear();
-		for (int i = 0; i <= 60; i++) {
-			arry_Minutes.add(i + "");
+		for (int i = 0; i <= 59; i++) {
+            if (i<10){
+                arry_Minutes.add("0"+i + "");
+            }else {
+                arry_Minutes.add(i + "");
+            }
 		}
 	}
 

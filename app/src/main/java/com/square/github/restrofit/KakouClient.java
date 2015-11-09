@@ -16,8 +16,6 @@ import org.json.JSONObject;
 public interface KakouClient {
 	@GET("/rest_cgs/index.php/v2/cgs/vehicles")
     void getinfo(@Query("q") String hp,Callback<JsonObject> callback);
-	@GET("/v1/ping/127.0.0.1")
-	void test_auth(Callback<JsonObject> callback);
 	@POST("/rest_kakou/index.php/v1/admin/login")
 	void login(@Body JsonObject object,Callback<JsonObject> callback);
 	@GET("/rest_kakou/index.php/v1/logo/fresh2")

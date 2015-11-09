@@ -44,9 +44,9 @@ public class ControlService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int user_id = intent.getIntExtra("user_id",-1);
-        String place_code = intent.getStringExtra("rt_code_place");
-        String fxbh_code = intent.getStringExtra("rt_code_fxbh");
-        String hphm = intent.getStringExtra("rt_hphm");
+        String place_code = intent.getStringExtra("cc_code_place");
+        String fxbh_code = intent.getStringExtra("cc_code_fxbh");
+        String hphm = intent.getStringExtra("cc_hphm");
         RefreshCarInfo(user_id,place_code,fxbh_code,hphm);
         return Service.START_NOT_STICKY;
     }
@@ -71,25 +71,25 @@ public class ControlService extends Service {
         int mfxbh =Integer.parseInt(fxbh)+1;
         String queryString = user_id+"+place:"+mplace+"+fxbh:"+mfxbh;
         System.out.println("querystr"+queryString);
-        KakouClient client = ServiceGenerator.createService(KakouClient.class, Constants.BASE_URL);
-        client.getRefresh(queryString, new Callback<JsonObject>() {
-            @Override
-            public void failure(RetrofitError arg0) {
-                arg0.printStackTrace();
-                if (isLinster){
-                    RefreshCarInfo(user_id, place, fxbh, hphm);
-                }
-            }
-
-            @Override
-            public void success(JsonObject arg0, Response arg1) {
-                JsonArray mArray = arg0.get("items").getAsJsonArray();
-                msendBroadcast(mArray);
-                if (isLinster){
-                    RefreshCarInfo(user_id, place, fxbh, hphm);
-                }
-            }
-        });
+//        KakouClient client = ServiceGenerator.createService(KakouClient.class, Constants.BASE_URL);
+//        client.getRefresh(queryString, new Callback<JsonObject>() {
+//            @Override
+//            public void failure(RetrofitError arg0) {
+//                arg0.printStackTrace();
+//                if (isLinster){
+//                    RefreshCarInfo(user_id, place, fxbh, hphm);
+//                }
+//            }
+//
+//            @Override
+//            public void success(JsonObject arg0, Response arg1) {
+//                JsonArray mArray = arg0.get("items").getAsJsonArray();
+//                msendBroadcast(mArray);
+//                if (isLinster){
+//                    RefreshCarInfo(user_id, place, fxbh, hphm);
+//                }
+//            }
+//        });
     }
 
 }

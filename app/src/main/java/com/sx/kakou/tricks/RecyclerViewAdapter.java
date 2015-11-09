@@ -6,12 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sx_kakou.R;
 import com.google.gson.JsonArray;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.sx.kakou.view.MainActivity;
 
 import org.json.JSONObject;
 
@@ -79,13 +81,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         //这里更新数据
         try{
             JSONObject mobject = new JSONObject(marray.get(position).toString());
             imageLoader.displayImage(mobject.getString("imgurl"),holder.carinfo_img,getImageLoaderOpt());
             holder.hphm.setText(mobject.getString("hphm"));
-            holder.jgsj.setText(mobject.getString("jgsj").substring(0,10));
+            holder.jgsj.setText(mobject.getString("jgsj").substring(0, 10));
             holder.cllx.setText(mobject.getString("cllx"));
             holder.clpp.setText(mobject.getString("clpp"));
             holder.csys.setText(mobject.getString("csys"));

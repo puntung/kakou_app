@@ -44,5 +44,24 @@
             android:text="统计分析"
             />
     </LinearLayout>
-
+    <LinearLayout
+        android:id="@+id/more_err_log"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="30dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/icon_err_log"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:textSize="14sp"
+            android:text="错误日志"
+            />
+    </LinearLayout>
 </LinearLayout>

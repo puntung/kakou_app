@@ -1,19 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/ah_mainlayout"
-    android:clickable="true"
-    tools:context="com.sx.kakou.view.HistoryItemActivity">
+    android:background="@color/background" > <!--#64AEF3-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:orientation="horizontal"
         android:background="@color/subtab"
-        android:layout_gravity="center"
         >
         <LinearLayout
-            android:id="@+id/ah_back"
+            android:id="@+id/errlog_back"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -30,12 +28,12 @@
                 android:layout_margin="8dp"
                 />
         </LinearLayout>
-        </LinearLayout>
-    <com.sx.kakou.tricks.ViewPagerFixed
-        android:id="@+id/viewpager"
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_errlog"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-    </com.sx.kakou.tricks.ViewPagerFixed>
+        android:background="@color/white"
+        ></android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

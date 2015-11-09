@@ -1,54 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:padding="10dp" >
+    android:orientation="horizontal">
 
-    <ImageView 
-        android:id="@+id/catinfo_img"
-        android:layout_width="300dp"
-        android:layout_height="200dp"
-        android:src="@drawable/board_gray"
-        android:scaleType="fitCenter"    
-        />
+    <android.support.v7.widget.CardView
+        android:id="@+id/rt_ct_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardUseCompatPadding="true">
     <LinearLayout 
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:padding="10dp"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="center|left"
         >
         <TextView 
-            android:id="@+id/hphm"
-            android:layout_width="wrap_content"
+            android:id="@+id/rt_ct_hphm"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:textSize="20sp"
-            android:layout_marginTop="10dp"
+            android:gravity="center"
             />
         <TextView 
-            android:id="@+id/jgsj"
+            android:id="@+id/rt_ct_jgsj"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
             />
         <TextView 
-            android:id="@+id/place"
+            android:id="@+id/rt_ct_place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
             />
         <TextView 
-            android:id="@+id/fxbh"
+            android:id="@+id/rt_ct_fxbh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
             />
     </LinearLayout>
 
-    
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

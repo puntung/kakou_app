@@ -8,15 +8,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <com.sx.kakou.tricks.ImageTouchView
-            android:id="@+id/ah_carinfo_img_hd"
+        <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:scaleType="fitCenter"
-            android:src="@drawable/board_gray"
-            android:layout_margin="10dp"
-            />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="4">
+            <uk.co.senab.photoview.PhotoView
+                android:id="@+id/ah_photoview_carinfo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/board_gray"
+                android:layout_margin="10dp"
+                />
+            <ProgressBar
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                style="?android:attr/progressBarStyle"
+                android:visibility="gone"/>
+        </RelativeLayout>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="fill_parent"

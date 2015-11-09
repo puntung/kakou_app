@@ -6,12 +6,19 @@
     <string name="hello_world">Hello world!</string>
 	<string name="close">关闭</string>
     <string name="place">卡口地点</string>
-    <string name="fxhb">行驶方向</string>
+    <string name="fxbh">行驶方向</string>
+    <string name="jgsj">经过时间</string>
     <string name="cancle">取消</string>
     <string name="back">返回</string>
+    <string name="clear">清空</string>
     <string name="ok">确定</string>
+    <string name="start_date">起始时间</string>
+    <string name="end_date">结束时间</string>
+
+   <string name="app_version_not_found">-</string>
     
     <!-- 车管所信息 -->
+    <string name="hpys">号牌颜色</string>
     <string name="hpzl">号牌种类</string>
     <string name="hphm">号牌号码</string>
     <string name="clpp1">车辆品牌</string>

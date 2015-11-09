@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sx_kakou.R;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,38 +16,36 @@ import org.json.JSONObject;
 /**
  * Created by mglory on 2015/8/13.
  */
-public class ControlViewAdapter extends RecyclerView.Adapter<ControlViewAdapter.ViewHolder> {
+public class RealTimeFreshAdapter extends RecyclerView.Adapter<RealTimeFreshAdapter.ViewHolder> {
 
-    private JSONArray marray;
+    private JsonArray marray;
     private MyItemClickListener mItemClickListener;
-    public JSONArray getDataList(){
+    public JsonArray getDataList(){
         return  marray;
     }
-    public void setDataList(JSONArray jsonArray){
+    public void setDataList(JsonArray jsonArray){
         this.marray = jsonArray;
     }
 
-    public ControlViewAdapter() {
+    public RealTimeFreshAdapter() {
     }
 
 
 
     public  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public View rootView;
-        public TextView control_hphm;
-        public TextView control_info;
-        public TextView control_place;
-        public TextView control_fxbh;
-        public ImageView control_img;
+        public TextView rt_ct_hphm;
+        public TextView rt_ct_place;
+        public TextView rt_ct_fxbh;
+        public TextView rt_ct_jgsj;
         public int position;
         public ViewHolder(View itemView) {
             super(itemView);
-            control_hphm = (TextView)itemView.findViewById(R.id.control_hphm);
-            control_info = (TextView)itemView.findViewById(R.id.control_info);
-            control_place = (TextView)itemView.findViewById(R.id.control_place);
-            control_fxbh = (TextView)itemView.findViewById(R.id.control_fxbh);
-            control_img = (ImageView)itemView.findViewById(R.id.control_img);
-            rootView = itemView.findViewById(R.id.card_view);
+            rt_ct_hphm = (TextView)itemView.findViewById(R.id.rt_ct_hphm);
+            rt_ct_place = (TextView)itemView.findViewById(R.id.rt_ct_place);
+            rt_ct_fxbh = (TextView)itemView.findViewById(R.id.rt_ct_fxbh);
+            rt_ct_jgsj = (TextView)itemView.findViewById(R.id.rt_ct_jgsj);
+            rootView = itemView.findViewById(R.id.rt_ct_card_view);
             rootView.setOnClickListener(this);
         }
 
@@ -60,7 +59,7 @@ public class ControlViewAdapter extends RecyclerView.Adapter<ControlViewAdapter.
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)  {
         View view;
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_cc_control, parent, false);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_rt_carinfo, parent, false);
         return new ViewHolder(view);
     }
 
@@ -74,11 +73,10 @@ public class ControlViewAdapter extends RecyclerView.Adapter<ControlViewAdapter.
         //这里更新数据
         try{
             JSONObject mobject = new JSONObject(marray.get(position).toString());
-            holder.control_hphm.setText(mobject.getString("control_hphm"));
-            holder.control_info.setText(mobject.getString("control_info"));
-            holder.control_place.setText(mobject.getString("control_place"));
-            holder.control_fxbh.setText(mobject.getString("control_fxbh"));
-            //holder.control_img
+            holder.rt_ct_hphm.setText(mobject.getString("hphm"));
+            holder.rt_ct_place.setText(mobject.getString("place"));
+            holder.rt_ct_fxbh.setText(mobject.getString("fxbh"));
+            holder.rt_ct_jgsj.setText(mobject.getString("jgsj"));
         }catch(Exception e){
         e.printStackTrace();
         }
@@ -88,7 +86,7 @@ public class ControlViewAdapter extends RecyclerView.Adapter<ControlViewAdapter.
 
     @Override
     public int getItemCount() {
-        return marray.length();
+        return marray.size();
     }
 
     public interface MyItemClickListener{

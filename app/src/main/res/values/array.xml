@@ -1,33 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="csysdict">
-        <item name="A">白</item>
-        <item name="B">灰</item>
-        <item name="C">黄</item>
-        <item name="D">粉</item>
-        <item name="E">红</item>
-        <item name="F">紫</item>
-        <item name="G">绿</item>
-        <item name="H">蓝</item>
-        <item name="I">棕</item>
-        <item name="J">黑</item>
-        <item name="Z">其他</item>
-    </string-array>
-    <string-array name="hpysdict">
-        <item >其他</item>
-        <item >蓝</item>
-        <item >黄</item>
-        <item >白</item>
-        <item >黑</item>
-    </string-array>
+
     <string-array name="cgs_label_en">
         <item>hpzl</item>
         <item>hphm</item>
         <item>clpp1</item>
         <item>clpp2</item>
-        <item>clxh</item>
-        <item>zzcmc</item>
-        <item>clsbdh</item>
+        <!--<item>clxh</item>-->
+        <!--<item>zzcmc</item>-->
+        <!--<item>clsbdh</item>-->
         <item>fdjh</item>
         <item>cllx</item>
         <item>csys</item>
@@ -39,9 +20,9 @@
         <item>号牌号码</item>
         <item>车辆品牌</item>
         <item>车辆子品牌</item>
-        <item>车辆序号</item>
-        <item>制造厂名称</item>
-        <item>车辆识别码</item>
+        <!--<item>车辆序号</item>-->
+        <!--<item>制造厂名称</item>-->
+        <!--<item>车辆识别码</item>-->
         <item>发动机号</item>
         <item>车辆类型</item>
         <item>车身颜色</item>
@@ -53,6 +34,7 @@
         <item>hphm</item>
         <item>cdbh</item>
         <item>clpp</item>
+        <item>clpp_dtl</item>
         <item>place</item>
         <item>hpys</item>
         <item>cllx</item>
@@ -64,6 +46,7 @@
         <item>号牌号码</item>
         <item>车道编号</item>
         <item>车辆品牌</item>
+        <item>车辆子品牌</item>
         <item>地点</item>
         <item>号牌颜色</item>
         <item>车辆类型</item>

@@ -70,6 +70,14 @@
                     android:textSize="16sp"
                     android:layout_margin="5dp"/>
             </LinearLayout>
+            <TextView
+            android:id="@+id/ah_cgs_nodata_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="没有找到相关数据！"
+            android:textSize="14sp"
+            android:visibility="gone"
+            />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/ah_cgs_rcy"
                 android:layout_width="match_parent"

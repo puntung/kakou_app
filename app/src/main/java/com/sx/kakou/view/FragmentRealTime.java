@@ -16,6 +16,7 @@ import com.square.github.restrofit.ServiceGenerator;
 import com.sx.kakou.tricks.PopupWindowContentAdapter;
 import com.sx.kakou.tricks.PullLoadMoreRecyclerView;
 import com.sx.kakou.tricks.RealTimeFreshAdapter;
+import com.sx.kakou.util.InitData;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -72,8 +73,7 @@ public class FragmentRealTime extends Fragment implements View.OnClickListener {
         tv_fxbh.setOnClickListener(this);
         tv_auto = (TextView) view.findViewById(R.id.rt_tv_auto);
         tv_auto.setOnClickListener(this);
-        Intent intent = getActivity().getIntent();
-        user_id = intent.getIntExtra("user_id", -1);
+        user_id = InitData.userInfo.getUserID();
         homeRefreshLayout.setLinearLayout();
         homeRefreshLayout.setPullLoadMoreListener(new PullLoadMoreListener());
         operatingAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
@@ -237,11 +237,11 @@ public class FragmentRealTime extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.rt_tv_place:
                 v.setTag("place");
-                showPopupWindowArea(MainActivity.place_code_list, MainActivity.place_list, tv_place, v);
+                showPopupWindowArea(InitData.place_code_list, InitData.place_list, tv_place, v);
                 break;
             case R.id.rt_tv_fxhb:
                 v.setTag("fxbh");
-                showPopupWindowArea(MainActivity.fxbh_code_list, MainActivity.fxbh_list, tv_fxbh, v);
+                showPopupWindowArea(InitData.fxbh_code_list, InitData.fxbh_list, tv_fxbh, v);
                 break;
             case R.id.rt_tv_auto:
                 String auto = isAuto ? "开始刷新":"正在刷新中...";

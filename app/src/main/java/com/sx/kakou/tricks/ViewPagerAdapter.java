@@ -1,11 +1,9 @@
 package com.sx.kakou.tricks;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,29 +11,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sx_kakou.R;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.square.github.restrofit.Constants;
 import com.square.github.restrofit.KakouClient;
 import com.square.github.restrofit.ServiceGenerator;
-import com.squareup.okhttp.Response;
-import com.sx.kakou.view.HistoryItemActivity;
-import com.sx.kakou.view.MainActivity;
+import com.sx.kakou.util.InitData;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by mglory on 2015/9/8.
@@ -43,14 +40,11 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class ViewPagerAdapter extends PagerAdapter {
     private Context context;
     private JSONArray array;
-    private int count;
     private LayoutInflater inflater;
-    public ViewPagerAdapter(Context context, JSONArray array,int count) {
+    public ViewPagerAdapter(Context context, JSONArray array) {
         this.context = context;
         this.array = array;
-        this.count = count;
         inflater = LayoutInflater.from(context);
-
     }
 
     @Override
@@ -74,6 +68,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         ImageView car_img = (ImageView)itemLayout.findViewById(R.id.ah_photoview_carinfo);
         RecyclerView cgs_cys = (RecyclerView)itemLayout.findViewById(R.id.ah_cgs_rcy);
         RecyclerView sb_cys = (RecyclerView)itemLayout.findViewById(R.id.ah_sb_rcy);
+        TextView nodata_tv = (TextView)itemLayout.findViewById(R.id.ah_cgs_nodata_tv);
         //填充数据
         RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(context);
         RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(context);
@@ -83,17 +78,19 @@ public class ViewPagerAdapter extends PagerAdapter {
         sb_cys.setLayoutManager(layoutManager2);
         try {
             JSONObject object = new JSONObject(array.get(position).toString());
-            System.out.println(object.toString());
+            //System.out.println(object.toString());
+            String thumb_url = object.getString("thumb_url");
+            String qs = object.getString("hphm")+"+hpys:"+object.getString("hpys").substring(0,1);
             String url = object.getString("imgurl");
+            ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
             DisplayImageOptions options = getImageLoaderOpt();
-
-           // PhotoViewAttacher mAttacher = new PhotoViewAttacher(car_img);
+            //PhotoViewAttacher mAttacher = new PhotoViewAttacher(car_img);
             String carinfo_tag[] = context.getResources().getStringArray(R.array.catinfo_label_en);
             String carinfo_value[] = context.getResources().getStringArray(R.array.catinfo_label_cn);
-            CarinfoAdapter carinfoAdapter = new CarinfoAdapter(context,object,carinfo_tag,carinfo_value);
+            CarinfoAdapter carinfoAdapter = new CarinfoAdapter(context,object,carinfo_tag,carinfo_value,Constants.TAG_SB);
             sb_cys.setAdapter(carinfoAdapter);
-            getCgsInfo(cgs_cys, object.getString("hphm"));
-            ImageLoader.getInstance().displayImage(url, car_img, options,new SimpleImageLoadingListener(){
+            getCgsInfo(cgs_cys,nodata_tv,qs);
+            imageLoader.displayImage(url, car_img, options, new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
                     spinner.setVisibility(View.VISIBLE);
@@ -128,7 +125,7 @@ public class ViewPagerAdapter extends PagerAdapter {
                     spinner.setVisibility(View.GONE);       // 不显示圆形进度条
                 }
             });
-            //mAttacher.update();
+          //  mAttacher.update();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -147,32 +144,55 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     }
     //获取车管所信息
-    public void getCgsInfo(final RecyclerView sb_cys, String qs){
-        KakouClient client = ServiceGenerator.createService(KakouClient.class, Constants.BASE_URL, Constants.CGS_USER,Constants.CGS_PWD);
-        client.getinfo(qs, new Callback<JsonObject>() {
-            @Override
-            public void success(JsonObject jsonObject, retrofit.client.Response response) {
+    public void getCgsInfo(final RecyclerView sb_cys,final TextView tv, final String qs){
+        // LruCache缓存机制
+        String data = InitData.lcu.getJsonLruCache(qs);
+        if(data != null){
+            try {
                 String cgs_tag[] = context.getResources().getStringArray(R.array.cgs_label_en);
                 String cgs_value[] =context.getResources().getStringArray(R.array.cgs_label_cn);
-                try {
-                    JSONObject cgsinfo = new JSONObject(jsonObject.toString());
-                    if (cgsinfo.getInt("total_count") == 0) {
-                        cgs_tag = null;
-                    }
+                JSONObject cgsinfo = new JSONObject(data);
+                if (cgsinfo.getInt("total_count") != 0) {
                     JSONArray array = new JSONArray(cgsinfo.getString("items"));
                     JSONObject itemobject = new JSONObject(array.get(0).toString());
-                    CarinfoAdapter cgsinfoAdapter = new CarinfoAdapter(context,itemobject, cgs_tag, cgs_value);
+                    CarinfoAdapter cgsinfoAdapter = new CarinfoAdapter(context,itemobject, cgs_tag, cgs_value,Constants.TAG_CGS);
                     sb_cys.setAdapter(cgsinfoAdapter);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    cgsinfoAdapter.notifyDataSetChanged();
+                }else {
+                    tv.setVisibility(View.VISIBLE);
                 }
-            }
 
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                retrofitError.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+        }else {
+            KakouClient client = ServiceGenerator.createService(KakouClient.class, Constants.BASE_URL, Constants.CGS_USER, Constants.CGS_PWD);
+            client.getinfo(qs, new Callback<JsonObject>() {
+                @Override
+                public void success(JsonObject jsonObject, retrofit.client.Response response) {
+                    InitData.lcu.addJsonLruCache(qs,jsonObject.toString());
+                    String cgs_tag[] = context.getResources().getStringArray(R.array.cgs_label_en);
+                    String cgs_value[] =context.getResources().getStringArray(R.array.cgs_label_cn);
+                    try {
+                        JSONObject cgsinfo = new JSONObject(jsonObject.toString());
+                        if (cgsinfo.getInt("total_count") != 0) {
+                            JSONArray array = new JSONArray(cgsinfo.getString("items"));
+                            JSONObject itemobject = new JSONObject(array.get(0).toString());
+                            CarinfoAdapter cgsinfoAdapter = new CarinfoAdapter(context,itemobject, cgs_tag, cgs_value,Constants.TAG_CGS);
+                            sb_cys.setAdapter(cgsinfoAdapter);
+                            cgsinfoAdapter.notifyDataSetChanged();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError retrofitError) {
+                    retrofitError.printStackTrace();
+                }
+            });
+        }
     }
 
     /*
@@ -180,15 +200,16 @@ public class ViewPagerAdapter extends PagerAdapter {
     *
     * */
     public DisplayImageOptions getImageLoaderOpt(){
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
+        return new DisplayImageOptions.Builder()
                 .showStubImage(R.drawable.board_gray) //加载时显示的页面
                 .showImageForEmptyUri(R.drawable.image_notfound)
                 .showImageOnFail(R.drawable.image_notfound)
                 //.delayBeforeLoading(400) //设置下载前延时时间
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .imageScaleType(ImageScaleType.EXACTLY)
                 .cacheInMemory(true)
                 .cacheOnDisc(true)
                 .displayer(new FadeInBitmapDisplayer(100)) // 设置加载后渐入动画时间
                 .build();
-        return options;
     }
 }

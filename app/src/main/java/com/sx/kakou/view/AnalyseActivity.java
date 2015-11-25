@@ -51,7 +51,7 @@ public class AnalyseActivity extends Activity {
                 super.onProgressChanged(view, newProgress);
             }
         });
-        analyseView.loadUrl("http://www.hcharts.cn/demo/index.php?p=10&theme=grid-light");
+        //analyseView.loadUrl("http://www.hcharts.cn/demo/index.php?p=10&theme=grid-light");
 
     }
 }

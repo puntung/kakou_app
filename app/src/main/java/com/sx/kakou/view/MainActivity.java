@@ -9,18 +9,23 @@ import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.decode.BaseImageDecoder;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.square.github.restrofit.Constants;
 import com.square.github.restrofit.KakouClient;
 import com.square.github.restrofit.ServiceGenerator;
+import com.sx.kakou.model.UserInfo;
 import com.sx.kakou.tricks.ControlService;
 import com.sx.kakou.util.DataCleanManager;
+import com.sx.kakou.util.FileHelper;
+import com.sx.kakou.util.InitData;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -72,10 +77,7 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,Vi
     private  TextView tv_appversion;
     private PopupWindow popupWindow;
     private ProgressDialog progressDialog = null;
-
-    public static List<String> place_list,fxbh_list,hpys_list;
-    public static List<Integer> place_code_list,fxbh_code_list,hpys_code_list;
-    public static JsonArray RealTimeDate;
+    private InitData initData;
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -87,7 +89,6 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,Vi
         mradioGroup.check(R.id.rb_history);
 	}
 
-
     private void init(){
         progressDialog = ProgressDialog.show(this, null,"正在加载数据...",true);
         progressDialog.setCancelable(false);
@@ -97,99 +98,10 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,Vi
 		mradioGroup.setOnCheckedChangeListener(this);
 		setup_view.setOnClickListener(this);
         client = ServiceGenerator.createService(KakouClient.class, Constants.BASE_URL);
-		//初始化数据，并保存在内存中
-        place_list = new ArrayList<>();
-        fxbh_list = new ArrayList<>();
-        hpys_list = new ArrayList<>();
-        place_code_list = new ArrayList<>();
-        hpys_code_list = new ArrayList<>();
-        fxbh_code_list = new ArrayList<>();
-        RealTimeDate = new JsonArray();
-        initPlace();
-        initFxbh();
-        initHpys();
+//		//初始化数据，并保存在内存中
+        initData = new InitData();
         progressDialog.dismiss();
 	}
-
-    public void initPlace(){
-        client.getPlace(new Callback<JsonObject>() {
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                retrofitError.printStackTrace();
-            }
-
-            @Override
-            public void success(JsonObject arg0, Response arg1) {
-                try {
-                    JSONArray array = new JSONArray(arg0.get("items").toString());
-                    place_list.add("全部");
-                    place_code_list.add(0);
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject object = new JSONObject(array.get(i).toString());
-                        place_list.add(object.getString("name"));
-                        place_code_list.add(object.getInt("id"));
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-        });
-    }
-    public void initHpys(){
-        client.getHpys(new Callback<JsonObject>() {
-            @Override
-            public void success(JsonObject jsonObject, Response response) {
-                try {
-                    hpys_list.add("全部");
-                    hpys_code_list.add(0);
-                    JSONArray array = new JSONArray(jsonObject.get("items").toString());
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject mobject = new JSONObject(array.get(i).toString());
-                        hpys_list.add(mobject.getString("name"));
-                        hpys_code_list.add(mobject.getInt("id"));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-
-            }
-        });
-    }
-
-    public void initFxbh(){
-        client.getFxhb(new Callback<JsonObject>() {
-            @Override
-            public void success(JsonObject jsonObject, Response response) {
-                try {
-                    fxbh_list.add("全部");
-                    fxbh_code_list.add(0);
-                    JSONArray array = new JSONArray(jsonObject.get("items").toString());
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject object = new JSONObject(array.get(i).toString());
-                        if (!object.getString("name").equals("其他")) {
-                            fxbh_list.add(object.getString("name"));
-                            fxbh_code_list.add(object.getInt("id"));
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                retrofitError.printStackTrace();
-                Toast.makeText(MainActivity.this, "抱歉！出现了异常，请与开发者联系", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
 	@Override
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -223,12 +135,10 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,Vi
                 popupWindow.dismiss();
                 break;
             case R.id.setup_about:
-                inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.activity_login, null);
-
+                Toast.makeText(this,getVersion(),Toast.LENGTH_SHORT).show();
                 break;
             case R.id.setup_update:
-                Toast.makeText(this,"功能内测中",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"当前是最新版本",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.setup_cache:
                 DataCleanManager.cleanInternalCache(MainActivity.this);
@@ -244,7 +154,6 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,Vi
 		}
 	}
 
-
     public void showLogoutDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("要退出当前用户吗？");
@@ -253,8 +162,8 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,Vi
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
-				Intent intent = new Intent(MainActivity.this,ControlService.class);
-				MainActivity.this.stopService(intent);
+                DataCleanManager dm = new DataCleanManager();
+                dm.cleanSharedPreference(MainActivity.this);
                 finish();
             }
         });
@@ -313,6 +222,20 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,Vi
 
 	}
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dismissPopupWindow();
+    }
+
+    //判断PopupWindow是不是存在，存在就把它dismiss掉
+    private void dismissPopupWindow() {
+
+        if(popupWindow != null){
+            popupWindow.dismiss();
+            popupWindow = null;
+        }
+    }
 
 	/**
 	 * 设置添加屏幕的背景透明度
@@ -339,16 +262,14 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,Vi
 
     public void initImageLoader(Context context) {
 	        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-	        .threadPoolSize(3)
+	        .threadPoolSize(5)
 	        .threadPriority(Thread.NORM_PRIORITY - 2)
 	        .denyCacheImageMultipleSizesInMemory()
 	        .memoryCache(new LruMemoryCache(2* 1024 * 1024)) /// 设置内存缓存 默认为一个当前应用可用内存的1/8大小的LruMemoryCache
-	        .memoryCacheSize(2 * 1024 * 1024)  //  设置内存缓存的最大大小 默认为一个当前应用可用内存的1/8
-            .discCacheSize(50*1024*1024) //50MB sd卡缓存
-	        .discCacheFileNameGenerator(new Md5FileNameGenerator())
-            .discCache(new UnlimitedDiscCache(getCacheDir())) //自定义缓存路径
+	        .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+            .diskCache(new UnlimitedDiscCache(getCacheDir())) //自定义缓存路径
             .imageDownloader(new BaseImageDownloader(context,5*1000,30*1000)) //connecttime 5s,readTimeout 30s
-	        .tasksProcessingOrder(QueueProcessingType.LIFO)
+	        .tasksProcessingOrder(QueueProcessingType.FIFO)
 	       // .writeDebugLogs() // Remove                                                                                                                                                                                                                                                                                // app
 	         .build();
 	        ImageLoader.getInstance().init(config);  

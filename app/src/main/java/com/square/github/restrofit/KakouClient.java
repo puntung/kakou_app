@@ -7,9 +7,11 @@ import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 import com.google.gson.JsonObject;
+import com.squareup.okhttp.Call;
 
 import org.json.JSONObject;
 
@@ -18,10 +20,8 @@ public interface KakouClient {
     void getinfo(@Query("q") String hp,Callback<JsonObject> callback);
 	@POST("/rest_kakou/index.php/v1/admin/login")
 	void login(@Body JsonObject object,Callback<JsonObject> callback);
-	@GET("/rest_kakou/index.php/v1/logo/fresh2")
+	@GET("/rest_kakou/index.php/v1/logo/fresh")
 	void getRefresh(@Query("q") String qs,Callback<JsonObject> callback);
-	@GET("/rest_kakou/index.php/v1/logo/ppdm")
-	 void getPpdm(Callback<JsonObject> callback );
 	@GET("/rest_kakou/index.php/v1/logo/place")
 	void getPlace(Callback<JsonObject> callback);
 	@GET("/rest_kakou/index.php/v1/logo/fxbh")
@@ -30,6 +30,12 @@ public interface KakouClient {
 	void getCsys(Callback<JsonObject> callback);
 	@GET("/rest_kakou/index.php/v1/logo/hpys")
 	void getHpys(Callback<JsonObject> callback);
-	@GET("/rest_kakou/index.php/v1/logo/carinfos2")
+	@GET("/rest_kakou/index.php/v1/logo/hpzl")
+	void getHpzl(Callback<JsonObject> callback);
+	@GET("/rest_kakou/index.php/v1/logo/cllx")
+	void getCllx(Callback<JsonObject> callback);
+    @GET("/rest_kakou/index.php/v1/logo/ppdm/{id}")
+    void getPpdm(@Path("id") int ppdmId,Callback<JsonObject> callback);
+	@GET("/rest_kakou/index.php/v1/logo/carinfos")
     void getCarInfosList(@Query("q") String qs,Callback<JsonObject> callback);
 }

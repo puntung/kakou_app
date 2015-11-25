@@ -3,7 +3,6 @@ package com.sx.kakou.view;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -38,7 +37,7 @@ public class HistoryItemActivity extends Activity implements View.OnClickListene
         mViewPager = (ViewPagerFixed)findViewById(R.id.viewpager);
         try {
             JSONArray dataArray = new JSONArray(intentdata);
-            mViewPagerAdapter = new ViewPagerAdapter(this,dataArray,count);
+            mViewPagerAdapter = new ViewPagerAdapter(this,dataArray);
         }catch (Exception e){
             e.printStackTrace();
         }

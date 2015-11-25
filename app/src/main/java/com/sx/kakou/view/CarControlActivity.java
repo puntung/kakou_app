@@ -38,6 +38,7 @@ import com.sx.kakou.tricks.ControlViewAdapter;
 import com.sx.kakou.tricks.PopupWindowContentAdapter;
 import com.sx.kakou.tricks.PullLoadMoreRecyclerView;
 import com.sx.kakou.tricks.RecyclerViewAdapter;
+import com.sx.kakou.util.InitData;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -264,10 +265,10 @@ public class CarControlActivity extends Activity implements OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.cc_tv_place:
-                showPopupWindowArea(MainActivity.place_list, cc_place, v,"place");
+                showPopupWindowArea(InitData.place_list, cc_place, v,"place");
                 break;
             case R.id.cc_tv_fxhb:
-                showPopupWindowArea(MainActivity.fxbh_list, cc_fxbh, v, "fxbh");
+                showPopupWindowArea(InitData.fxbh_list, cc_fxbh, v, "fxbh");
                 break;
             case R.id.cc_tv_control:
                 try{

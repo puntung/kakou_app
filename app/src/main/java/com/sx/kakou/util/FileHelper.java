@@ -114,12 +114,6 @@ public class FileHelper {
             return sb.toString();
         }
 
-    public String getFILESPATH() {
-        return FILESPATH;
-    }
-    public String getSDPATH() {
-        return SDPATH;
-    }
     public boolean hasSD() {
         return hasSD;
     }

@@ -1,7 +1,5 @@
 package com.sx.kakou.view;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -12,6 +10,7 @@ import com.google.gson.JsonObject;
 import com.square.github.restrofit.Constants;
 import com.square.github.restrofit.KakouClient;
 import com.square.github.restrofit.ServiceGenerator;
+import com.sx.kakou.util.InitData;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -20,7 +19,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -55,39 +53,39 @@ public class LoginActivity extends Activity implements OnClickListener{
 	}
 	
 	public void Login(){
-		progressDialog = ProgressDialog.show(this, null,"请稍等",true);
+		progressDialog = ProgressDialog.show(this, null, "请稍等", true);
 		progressDialog.setCancelable(true);
 		JsonObject object = new JsonObject();
-		object.addProperty("username", et_username.getText().toString());
-		object.addProperty("password", et_password.getText().toString());
+		object.addProperty("username", et_username.getText().toString().trim());
+		object.addProperty("password", et_password.getText().toString().trim());
 		KakouClient client = ServiceGenerator.createService(KakouClient.class, Constants.BASE_URL);
-		System.out.println(object.toString());
 		client.login(object, new Callback<JsonObject>() {
 
 			@Override
 			public void success(JsonObject arg0, Response arg1) {
+				System.out.println(arg0.toString());
 				int user_id = Integer.parseInt(arg0.get("user_id").toString());
-				startActivity(new Intent(LoginActivity.this,MainActivity.class).putExtra("user_id",user_id));
+				int role_id = Integer.parseInt(arg0.get("role_id").toString());
+				String user_name = arg0.get("username").toString();
+				String role_name = arg0.get("rolename").toString();
+				InitData.userInfo.setUserID(user_id);
+				InitData.userInfo.setRoleID(role_id);
+				InitData.userInfo.setUserName(user_name);
+				InitData.userInfo.setRoleName(role_name);
+				startActivity(new Intent(LoginActivity.this, MainActivity.class));
 				progressDialog.dismiss();
 			}
 
 			@Override
 			public void failure(RetrofitError arg0) {
 				arg0.printStackTrace();
-                // 401 IP not authorize
-                //403 服务  forbiden
-				//ECONNREFUSED  //安全客户端没开
-                // unauthrion 密码错误
                 try{
                     System.out.println("for--->"+arg0.getMessage());
                     if (arg0!=null){
-//						System.out.println(arg0.getBody().toString());
-//                        JSONObject errobject = new JSONObject(arg0.getBody().toString());
-//                        String errStr = errobject.getString("message");
                         String errStr = arg0.getMessage().toString();
                         switch (errStr){
                             case "401 Unauthorized":
-                                Toast.makeText(LoginActivity.this, "账号或密码错误或限制访问", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
                                 break;
                             case "401 IP not authorized":
                                 Toast.makeText(LoginActivity.this, "IP限制访问", Toast.LENGTH_SHORT).show();
@@ -96,27 +94,16 @@ public class LoginActivity extends Activity implements OnClickListener{
                                 Toast.makeText(LoginActivity.this, "用户禁止访问", Toast.LENGTH_SHORT).show();
                                 break;
                             case "failed to connect to /127.0.0.1 (port 8060): connect failed: ECONNREFUSED (Connection refused)":
-                                Toast.makeText(LoginActivity.this, "请检查安全客户端是否开启", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "请检查网络/安全客户端", Toast.LENGTH_SHORT).show();
                                 break;
-                            case "ETIMEDOUT":
-                                Toast.makeText(LoginActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
+                            case "recvfrom failed: ECONNRESET (Connection reset by peer)":
+								Toast.makeText(LoginActivity.this, "请检查网络/安全客户端", Toast.LENGTH_SHORT).show();
                                 break;
                             default:
-                                Toast.makeText(LoginActivity.this,"其他错误:"+errStr, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this,"未知错误:"+errStr, Toast.LENGTH_SHORT).show();
                                 break;
                         }
-                    }else {
-//                        System.out.println(arg0.getMessage());
-//                        if (arg0.getMessage().contains("ECONNREFUSED")){
-//                            Toast.makeText(LoginActivity.this, "请检查安全客户端是否开启", Toast.LENGTH_SHORT).show();
-//                        }else if (arg0.getMessage().contains("ETIMEDOUT")){
-//                            Toast.makeText(LoginActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
-//                        }else {
-//                            Toast.makeText(LoginActivity.this, "未知错误", Toast.LENGTH_SHORT).show();
-//                        }
-
                     }
-
                     progressDialog.dismiss();
                 }catch (Exception e){
                     e.printStackTrace();

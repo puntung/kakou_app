@@ -22,10 +22,12 @@ public interface KakouClient {
 	void login(@Body JsonObject object,Callback<JsonObject> callback);
 	@GET("/rest_kakou/index.php/v1/logo/fresh")
 	void getRefresh(@Query("q") String qs,Callback<JsonObject> callback);
-	@GET("/rest_kakou/index.php/v1/logo/place")
-	void getPlace(Callback<JsonObject> callback);
+//	@GET("/rest_kakou/index.php/v1/logo/place")
+//	void getPlace(Callback<JsonObject> callback);
+	@GET("/rest_kakou/index.php/v1/logo/kkdd")
+	void getKkdd(Callback<JsonObject> callback);
 	@GET("/rest_kakou/index.php/v1/logo/fxbh")
-	void getFxhb(Callback<JsonObject> callback);
+	void getFxbh(Callback<JsonObject> callback);
 	@GET("/rest_kakou/index.php/v1/logo/csys")
 	void getCsys(Callback<JsonObject> callback);
 	@GET("/rest_kakou/index.php/v1/logo/hpys")
@@ -34,8 +36,10 @@ public interface KakouClient {
 	void getHpzl(Callback<JsonObject> callback);
 	@GET("/rest_kakou/index.php/v1/logo/cllx")
 	void getCllx(Callback<JsonObject> callback);
+	@GET("/rest_kakou/index.php/v1/logo/ppdm")
+	void getPpdm(Callback<JsonObject> callback);
     @GET("/rest_kakou/index.php/v1/logo/ppdm/{id}")
-    void getPpdm(@Path("id") int ppdmId,Callback<JsonObject> callback);
+    void getPpdm2(@Path("id") String ppdmId,Callback<JsonObject> callback);
 	@GET("/rest_kakou/index.php/v1/logo/carinfos")
     void getCarInfosList(@Query("q") String qs,Callback<JsonObject> callback);
 }

@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     <LinearLayout
+        android:id="@+id/fh_navbar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.8"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/subtab"
         android:focusable="true"
@@ -19,7 +19,7 @@
             android:text="@string/place"
             android:gravity="center"
             android:textSize="14sp"
-            android:layout_margin="10dp"
+            android:layout_margin="8dp"
             android:textColor="@color/font_grey"
             android:background="@drawable/corners_bg"
             />
@@ -30,7 +30,7 @@
             android:text="@string/fxbh"
             android:gravity="center"
             android:textSize="14sp"
-            android:layout_margin="10dp"
+            android:layout_margin="8dp"
             android:textColor="@color/font_grey"
             android:background="@drawable/corners_bg"
             />
@@ -41,7 +41,18 @@
             android:text="@string/hpys"
             android:gravity="center"
             android:textSize="14sp"
-            android:layout_margin="10dp"
+            android:layout_margin="8dp"
+            android:textColor="@color/font_grey"
+            android:background="@drawable/corners_bg"
+            />
+        <TextView
+            android:id="@+id/fh_ppdm"
+            android:layout_width="100dp"
+            android:layout_height="35dp"
+            android:text="@string/clpp1"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:layout_margin="8dp"
             android:textColor="@color/font_grey"
             android:background="@drawable/corners_bg"
             />
@@ -52,7 +63,7 @@
             android:text="@string/start_date"
             android:gravity="center"
             android:textSize="14sp"
-            android:layout_margin="10dp"
+            android:layout_margin="8dp"
             android:textColor="@color/font_grey"
             android:background="@drawable/corners_bg"
             />
@@ -63,22 +74,22 @@
             android:text="@string/end_date"
             android:gravity="center"
             android:textSize="14sp"
-            android:layout_margin="10dp"
+            android:layout_margin="8dp"
             android:textColor="@color/font_grey"
             android:background="@drawable/corners_bg"
             />
 
-        <EditText
-            android:id="@+id/fh_hphm"
-            android:layout_width="140dp"
-            android:layout_height="35dp"
-            android:hint="@string/hphm"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:layout_margin="10dp"
-            android:background="@drawable/corners_bg"
-            />
+        <!--<EditText-->
+            <!--android:id="@+id/fh_hphm"-->
+            <!--android:layout_width="140dp"-->
+            <!--android:layout_height="35dp"-->
+            <!--android:hint="@string/hphm"-->
+            <!--android:gravity="center"-->
+            <!--android:textSize="14sp"-->
+            <!--android:singleLine="true"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@drawable/corners_bg"-->
+            <!--/>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -94,22 +105,107 @@
                 android:textColor="@color/white"
                 android:background="@drawable/btn_blue_selector"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="8dp"/>
 
         </LinearLayout>
 
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/tab"/>
 
-    <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:background="@color/background"/>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="查找指定号牌"
+            android:layout_margin="5dp"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/search_icon"/>
+        <EditText
+            android:id="@+id/fh_hphm"
+            android:layout_width="140dp"
+            android:layout_height="30dp"
+            android:hint="粤L 12345"
+            android:maxLength="7"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:singleLine="true"
+            android:background="@drawable/corners_bg"
+            android:layout_margin="5dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            android:paddingRight="20dp"
+            android:focusable="false"
+            android:gravity="right">
+            <ImageView
+                android:id="@+id/fh_order_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:src="@drawable/order_selector"/>
+            <TextView
+                android:id="@+id/fh_order_jcsj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="时间"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:textColor="@drawable/navigatiion_fontcolor_selector"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="|"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:layout_margin="5dp"
+                />
+            <TextView
+                android:id="@+id/fh_order_ppdm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clpp1"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:textColor="@drawable/navigatiion_fontcolor_selector"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+        <!--<ImageView-->
+            <!--android:id="@+id/img_pullmore"-->
+            <!--android:layout_width="200dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:clickable="true"-->
+            <!--android:src="@drawable/pullmore_btn_selector"/>-->
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/tab"/>
 
     <com.sx.kakou.tricks.PullLoadMoreRecyclerView
         android:id="@+id/pullLoadMoreRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
+        android:layout_height="match_parent"
         />
 
 </LinearLayout>

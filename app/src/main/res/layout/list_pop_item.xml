@@ -12,9 +12,4 @@
         android:paddingTop="8dp"
         android:textColor="#333333"
         />
-        <View
-            android:layout_width="match_parent"
-            android:padding="5dp"
-            android:layout_height="1dp"
-            android:background="@color/background"></View>
 </LinearLayout>

@@ -31,7 +31,6 @@ public class RealTimeFreshAdapter extends RecyclerView.Adapter<RealTimeFreshAdap
     }
 
 
-
     public  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public View rootView;
         public TextView rt_ct_hphm;

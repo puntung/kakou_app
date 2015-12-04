@@ -265,7 +265,7 @@ public class CarControlActivity extends Activity implements OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.cc_tv_place:
-                showPopupWindowArea(InitData.place_list, cc_place, v,"place");
+                showPopupWindowArea(InitData.kkdd_list, cc_place, v,"place");
                 break;
             case R.id.cc_tv_fxhb:
                 showPopupWindowArea(InitData.fxbh_list, cc_fxbh, v, "fxbh");

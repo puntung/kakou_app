@@ -27,7 +27,6 @@ public class HistoryItemActivity extends Activity implements View.OnClickListene
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_history_item);
         init();
-
     }
 
     public void init(){
@@ -37,7 +36,7 @@ public class HistoryItemActivity extends Activity implements View.OnClickListene
         mViewPager = (ViewPagerFixed)findViewById(R.id.viewpager);
         try {
             JSONArray dataArray = new JSONArray(intentdata);
-            mViewPagerAdapter = new ViewPagerAdapter(this,dataArray);
+            mViewPagerAdapter = new ViewPagerAdapter(this,dataArray,count);
         }catch (Exception e){
             e.printStackTrace();
         }

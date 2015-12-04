@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0080B2" > <!--#64AEF3 / 095fb0-->
+    android:background="@drawable/bg" > <!--#64AEF3 / 095fb0-->
 
 
 
@@ -57,19 +57,19 @@
     <ImageView
         android:id="@+id/app_title"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_above="@id/login_borad"
-        android:src="@drawable/logo_background"
+        android:src="@drawable/logo"
         />
-    <ImageView
-        android:id="@+id/app_titlename"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:layout_above="@id/login_borad"
-        android:src="@drawable/app_title"
-        android:layout_marginBottom="5dp"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/app_titlename"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_above="@id/login_borad"-->
+        <!--android:src="@drawable/app_title"-->
+        <!--android:layout_marginBottom="5dp"/>-->
 
 </RelativeLayout>

@@ -25,6 +25,15 @@ public class PopupWindowContentAdapter  extends BaseAdapter {
         this.strs = strs;
         this.context = context;
     }
+
+    public List<String> getStrs() {
+        return strs;
+    }
+
+    public void setStrs(List<String> strs) {
+        this.strs = strs;
+    }
+
     @Override
     public int getCount() {
         return strs.size();

@@ -40,7 +40,7 @@
             android:id="@+id/rt_tv_auto"
             android:layout_width="130dp"
             android:layout_height="35dp"
-            android:text="正在刷新中"
+            android:text="刷新中..."
             android:textSize="16sp"
             android:gravity="center"
             android:layout_marginLeft="20dp"
@@ -60,60 +60,65 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/background"/>
-    <LinearLayout
-        android:id="@+id/rt_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/white"
-        >
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_weight="1"
-            android:text="@string/hphm"
-            android:textSize="14sp"
-            android:gravity="center"
-            />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_weight="1"
-            android:text="@string/jgsj"
-            android:textSize="14sp"
-            android:gravity="center"
-            />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_weight="1"
-            android:text="@string/place"
-            android:textSize="14sp"
-            android:gravity="center"
-            />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_weight="1"
-            android:text="@string/fxbh"
-            android:textSize="14sp"
-            android:gravity="center"
-            />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
-            <com.sx.kakou.tricks.PullLoadMoreRecyclerView
-                android:id ="@+id/home_swip"
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/rt_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/white"
                 >
-            </com.sx.kakou.tricks.PullLoadMoreRecyclerView>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1"
+                    android:text="@string/hphm"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1"
+                    android:text="@string/jgsj"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1"
+                    android:text="@string/place"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1"
+                    android:text="@string/fxbh"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+                <com.sx.kakou.tricks.PullLoadMoreRecyclerView
+                    android:id ="@+id/home_swip"
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="match_parent"
+                    >
+                </com.sx.kakou.tricks.PullLoadMoreRecyclerView>
+            </LinearLayout>
+
         </LinearLayout>
-
-
 </LinearLayout>

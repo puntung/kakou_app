@@ -40,6 +40,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class FragmentRealTime extends Fragment implements View.OnClickListener {
@@ -67,7 +68,7 @@ public class FragmentRealTime extends Fragment implements View.OnClickListener {
         tv_place = (TextView) view.findViewById(R.id.rt_tv_place);
         tv_fxbh = (TextView) view.findViewById(R.id.rt_tv_fxhb);
         img_waiting = (ImageView) view.findViewById(R.id.rt_img_waiting);
-        tv_place.setText(mPreferences.getString("rt_place", "卡口地点"));
+        tv_place.setText(mPreferences.getString("rt_kkdd", "卡口地点"));
         tv_fxbh.setText(mPreferences.getString("rt_fxbh", "卡口方向"));
         tv_place.setOnClickListener(this);
         tv_fxbh.setOnClickListener(this);
@@ -113,23 +114,23 @@ public class FragmentRealTime extends Fragment implements View.OnClickListener {
     public void RefreshCarInfo(final int userid){
                 if (isCompleted){
                     isCompleted = false;
-                    String place = mPreferences.getString("rt_code_place", "");
+                    String kkdd = mPreferences.getString("rt_code_kkdd", "");
                     String fxbh = mPreferences.getString("rt_code_fxbh", "");
-                    if (place.equals("0")){
-                        place = "";
+                    MyCallback mc = new MyCallback();
+                    if (kkdd.equals("0")){
+                        kkdd = "";
                     }else {
-                        place = "+place:"+place;
+                        kkdd = "+kkdd:"+kkdd;
                     }
                     if (fxbh.equals("0")){
                         fxbh = "";
                     }else {
                         fxbh = "+fxbh:"+fxbh;
                     }
-                    String queryString = userid+place+fxbh;
+                    String queryString = userid+kkdd+fxbh;
                     System.out.println(queryString);
                     KakouClient client = ServiceGenerator.createService(KakouClient.class, Constants.BASE_URL);
-                    MyCallback mc = new MyCallback();
-                    client.getRefresh(queryString, mc);
+                    client.getRefresh(queryString,mc);
                 }
 
     }
@@ -145,6 +146,7 @@ public class FragmentRealTime extends Fragment implements View.OnClickListener {
                         setOnItemClickListener(freshAdapter);
                         homeRefreshLayout.setAdapter(freshAdapter);
                     } else {
+                        System.out.println("else-->"+mArray.toString());
                         setOnItemClickListener(freshAdapter);
                         //添加在前面
                         JsonArray jsonarray = new JsonArray();
@@ -186,7 +188,7 @@ public class FragmentRealTime extends Fragment implements View.OnClickListener {
         });
     }
 
-    public void showPopupWindowArea(final List<Integer> code, final List<String> strs, final TextView textView, final View v) {
+    public void showPopupWindowArea(final List<Integer> code, final List<String> strs, final TextView textView) {
 
         View contentView = LayoutInflater.from(getActivity()).inflate(
                 R.layout.popwin_content_list, null);
@@ -197,7 +199,7 @@ public class FragmentRealTime extends Fragment implements View.OnClickListener {
         popupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), Bitmap.createBitmap(200, 300, Bitmap.Config.ALPHA_8)));
         popupWindow.setOutsideTouchable(true);
         popupWindow.setFocusable(true);
-        popupWindow.showAsDropDown(v, -40, 20);
+        popupWindow.showAsDropDown(textView, -40,0);
         PopupWindowContentAdapter adapter = new PopupWindowContentAdapter(getActivity(), strs);
         lv_content.setAdapter(adapter);
         lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -208,8 +210,8 @@ public class FragmentRealTime extends Fragment implements View.OnClickListener {
                 //搜索条件保存到本地
                 mPreferences = getActivity().getSharedPreferences("config", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = mPreferences.edit();
-                editor.putString("rt_code_" + v.getTag(), code.get(position) + "");
-                editor.putString("rt_" + v.getTag(), strs.get(position));
+                editor.putString("rt_code_" + textView.getTag(), code.get(position) + "");
+                editor.putString("rt_" + textView.getTag(), strs.get(position));
                 editor.apply();
                 textView.setText(strs.get(position));
                 if (popupWindow != null && popupWindow.isShowing()) {
@@ -236,15 +238,15 @@ public class FragmentRealTime extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rt_tv_place:
-                v.setTag("place");
-                showPopupWindowArea(InitData.place_code_list, InitData.place_list, tv_place, v);
+                v.setTag("kkdd");
+                showPopupWindowArea(InitData.kkdd_code_list, InitData.kkdd_list, tv_place);
                 break;
             case R.id.rt_tv_fxhb:
                 v.setTag("fxbh");
-                showPopupWindowArea(InitData.fxbh_code_list, InitData.fxbh_list, tv_fxbh, v);
+                showPopupWindowArea(InitData.fxbh_code_list, InitData.fxbh_list, tv_fxbh);
                 break;
             case R.id.rt_tv_auto:
-                String auto = isAuto ? "开始刷新":"正在刷新中...";
+                String auto = isAuto ? "开始刷新":"刷新中...";
                 tv_auto.setText(auto);
 
                 if (isAuto) {

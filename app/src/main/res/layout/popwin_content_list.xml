@@ -1,19 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical">
     <ImageView
+        android:id="@+id/pop_img"
         android:layout_width="15dp"
         android:layout_height="10dp"
-        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/reservation_popupwindow_bg">
-
     </ImageView>
     <ListView
         android:id="@+id/lv_popupwindow_content_Area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/pop_img"
         android:background="@color/white"
+        android:divider="#aeaeae"
+        android:dividerHeight="1dp"
         android:padding="10dp"
          />
-</LinearLayout>
+    <!--<ListView-->
+        <!--android:id="@+id/lv_popupwindow_content_SubArea"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/lv_popupwindow_content_Area"-->
+        <!--android:background="@color/white"-->
+        <!--android:divider="#aeaeae"-->
+        <!--android:dividerHeight="1dp"-->
+        <!--android:visibility="gone"-->
+        <!--android:padding="10dp"-->
+        <!--/>-->
+    <TextView
+        android:id="@+id/pop_load_tip"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:text="加载中..."
+        android:gravity="center"
+        android:textSize="14sp"
+        android:layout_margin="8dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textColor="@color/font_grey"
+        android:background="@drawable/corners_bg"
+        android:visibility="gone"
+        />
+</RelativeLayout>

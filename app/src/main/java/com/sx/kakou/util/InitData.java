@@ -26,8 +26,8 @@ import retrofit.client.Response;
  */
 public class InitData {
     private KakouClient client ;
-    public static List<String> place_list,fxbh_list,hpys_list;
-    public static List<Integer> place_code_list,fxbh_code_list,hpys_code_list;
+    public static List<String> kkdd_list,fxbh_list,hpys_list,ppdm_list,ppdm_code_list;
+    public static List<Integer> kkdd_code_list,fxbh_code_list,hpys_code_list;
     public static Map<String,String> hpzlmap;
     public static Map<String,String> csysmap;
     public static Map<String,String> cllxmap;
@@ -36,26 +36,52 @@ public class InitData {
     public InitData() {
         //初始化数据，并保存在内存中
         client = ServiceGenerator.createService(KakouClient.class, Constants.BASE_URL);
-        place_list = new ArrayList<>();
+        kkdd_list = new ArrayList<>();
         fxbh_list = new ArrayList<>();
         hpys_list = new ArrayList<>();
-        place_code_list = new ArrayList<>();
+        ppdm_list = new ArrayList<>();
+        kkdd_code_list = new ArrayList<>();
         hpys_code_list = new ArrayList<>();
         fxbh_code_list = new ArrayList<>();
+        ppdm_code_list = new ArrayList<>();
         hpzlmap = new HashMap<>();
         csysmap = new HashMap<>();
         cllxmap = new HashMap<>();
         lcu = new LruCacheUtil();
-        getPlace();
+        getKkdd();
         getFxbh();
         getHpys();
         getHpzl();
         getCsys();
         getCllx();
+        getPpdm();
     }
+    public void getPpdm(){
+        client.getPpdm(new Callback<JsonObject>() {
+            @Override
+            public void success(JsonObject jsonObject, Response response) {
+                try {
+                    ppdm_list.add("全部");
+                    ppdm_code_list.add("0");
+                    JSONArray array = new JSONArray(jsonObject.get("items").toString());
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject object = new JSONObject(array.get(i).toString());
+                        ppdm_list.add(object.getString("name"));
+                        ppdm_code_list.add(object.getString("code"));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
-    public void getPlace(){
-        client.getPlace(new Callback<JsonObject>() {
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
+            }
+        });
+    }
+    public void getKkdd(){
+        client.getKkdd(new Callback<JsonObject>() {
             @Override
             public void failure(RetrofitError retrofitError) {
                 retrofitError.printStackTrace();
@@ -65,14 +91,13 @@ public class InitData {
             public void success(JsonObject arg0, Response arg1) {
                 try {
                     JSONArray array = new JSONArray(arg0.get("items").toString());
-                    place_list.add("全部");
-                    place_code_list.add(0);
+                    kkdd_list.add("全部");
+                    kkdd_code_list.add(0);
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject object = new JSONObject(array.get(i).toString());
-                        place_list.add(object.getString("name"));
-                        place_code_list.add(object.getInt("id"));
+                        kkdd_list.add(object.getString("name"));
+                        kkdd_code_list.add(object.getInt("id"));
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -106,7 +131,7 @@ public class InitData {
     }
 
     public void getFxbh(){
-        client.getFxhb(new Callback<JsonObject>() {
+        client.getFxbh(new Callback<JsonObject>() {
             @Override
             public void success(JsonObject jsonObject, Response response) {
                 try {
@@ -142,7 +167,6 @@ public class InitData {
                     JsonObject object = hpzlarray.get(i).getAsJsonObject();
                     hpzlmap.put(object.get("code").toString().replace("\"", ""), object.get("name").toString().replace("\"", ""));
                 }
-                System.out.println(hpzlmap.toString());
             }
 
             @Override
@@ -180,20 +204,6 @@ public class InitData {
                     cllxmap.put(object.get("code").toString().replace("\"", ""), object.get("name").toString().replace("\"", ""));
                 }
             }
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                retrofitError.printStackTrace();
-            }
-        });
-    }
-
-    public void getPpdm(int id){
-        client.getPpdm(id, new Callback<JsonObject>() {
-            @Override
-            public void success(JsonObject jsonObject, Response response) {
-
-            }
-
             @Override
             public void failure(RetrofitError retrofitError) {
                 retrofitError.printStackTrace();

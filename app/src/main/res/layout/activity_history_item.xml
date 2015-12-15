@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/ah_mainlayout"
+    android:clickable="true"
+    tools:context="com.sx.kakou.view.HistoryItemActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:orientation="horizontal"
+        android:background="@color/subtab"
+        android:layout_gravity="center"
+        >
+        <LinearLayout
+            android:id="@+id/ah_back"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="@drawable/btn_blue_selector">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/back"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_margin="8dp"
+                />
+        </LinearLayout>
+        </LinearLayout>
+    <com.sx.kakou.tricks.ViewPagerFixed
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:orientation="vertical">
+    </com.sx.kakou.tricks.ViewPagerFixed>
+
+</LinearLayout>

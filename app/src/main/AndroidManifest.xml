@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.sx_kakou"
+    android:versionCode="1"
+    android:versionName="0.1.2" >
+
+    <uses-sdk
+        android:minSdkVersion="12"
+        android:targetSdkVersion="22" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+    <!--android:name="com.sx.kakou.tricks.MyApplication"-->
+    <application
+
+        android:allowBackup="true"
+        android:icon="@drawable/app_icon"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Light.NoTitleBar" >
+        <activity android:name="com.sx.kakou.view.LoginActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.sx.kakou.view.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.sx.kakou.view.HistoryItemActivity"
+            android:label="@string/title_activity_history_item" >
+        </activity>
+        <activity android:name="com.sx.kakou.view.CarControlActivity"></activity>
+        <activity android:name="com.sx.kakou.view.ErrorlistActivity"></activity>
+        <activity android:name="com.sx.kakou.view.ErrorlogActivity"></activity>
+        <activity android:name="com.sx.kakou.view.AnalyseActivity"></activity>
+        <service android:name="com.sx.kakou.services.UpdateService"></service>
+        <service
+            android:name="com.sx.kakou.tricks.ControlService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <receiver android:name="com.sx.kakou.view.CarControlActivity$ControlReceiver">
+            <intent-filter>
+                <action android:name="com.sx.kakou.view.action.CONTROL_CARINFO_ACTION"></action>
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg" > <!--#64AEF3 / 095fb0-->
+
+
+
+    	<LinearLayout
+            android:id="@+id/login_borad"
+    	    android:layout_width="280dp"
+    	    android:layout_height="wrap_content"
+    	    android:orientation="vertical"
+    	    android:layout_centerInParent="true"
+    	     >
+    	
+        <EditText 
+            android:id="@+id/account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="用户名"
+            android:background="#fff"
+            android:textSize="18sp"
+            android:singleLine="true"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#e6e6e6"
+            ></View>
+        <EditText 
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="密码"
+            android:singleLine="true"
+            android:textSize="18sp"
+            android:inputType="textPassword"
+            android:background="#fff"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+           
+            />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="3dp">
+                <CheckBox
+                    android:id="@+id/remind_chkb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/CustomCheckboxTheme"
+                    android:focusable="true"
+                     />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/jzmm"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    />
+            </LinearLayout>
+  		<Button 
+  		    android:id="@+id/login"
+  		    android:text="登陆"
+  		    android:textSize="18sp"
+  		    android:layout_width="match_parent"
+  		    android:layout_height="30dp"
+  		    android:layout_marginTop="3dp"
+  		    android:background="@drawable/login_btn_selector"
+  		    android:textColor="#fff"
+  		    />
+	</LinearLayout>
+    <ImageView
+        android:id="@+id/app_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_above="@id/login_borad"
+        android:src="@drawable/logo"
+        />
+    <!--<ImageView-->
+        <!--android:id="@+id/app_titlename"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_above="@id/login_borad"-->
+        <!--android:src="@drawable/app_title"-->
+        <!--android:layout_marginBottom="5dp"/>-->
+
+</RelativeLayout>

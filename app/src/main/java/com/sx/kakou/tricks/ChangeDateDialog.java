@@ -16,6 +16,8 @@ import com.sx.kakou.wheel.widget.views.OnWheelChangedListener;
 import com.sx.kakou.wheel.widget.views.OnWheelScrollListener;
 import com.sx.kakou.wheel.widget.views.WheelView;
 
+import org.w3c.dom.Text;
+
 /**
  * 日期选择对话框
  * 
@@ -25,6 +27,7 @@ import com.sx.kakou.wheel.widget.views.WheelView;
 public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 
 	private Context context;
+	private String title;
 	private WheelView wvYear;
 	private WheelView wvMonth;
 	private WheelView wvDay;
@@ -33,6 +36,7 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 
 	private View vChangeDate;
 	private View vChangeDateChild;
+    private TextView vChangDateTitle;
 	private TextView btnSure;
 	private TextView btnCancel;
 
@@ -70,9 +74,10 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 
 	private OnDateListener onDateListener;
 
-	public ChangeDateDialog(Context context) {
+	public ChangeDateDialog(Context context,String title) {
 		super(context, R.style.ShareDialog);
 		this.context = context;
+		this.title = title;
 	}
 
 	@Override
@@ -87,6 +92,7 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 
 		vChangeDate = findViewById(R.id.ly_myinfo_changedate);
 		vChangeDateChild = findViewById(R.id.ly_myinfo_changedate_child);
+        vChangDateTitle =(TextView)findViewById(R.id.tv_share_title);
 		btnSure = (TextView) findViewById(R.id.btn_myinfo_sure);
 		btnCancel = (TextView) findViewById(R.id.btn_myinfo_cancel);
 
@@ -94,6 +100,7 @@ public class ChangeDateDialog extends Dialog implements View.OnClickListener {
 		vChangeDateChild.setOnClickListener(this);
 		btnSure.setOnClickListener(this);
 		btnCancel.setOnClickListener(this);
+        vChangDateTitle.setText(title);
 
 		if (!issetdata) {
 			initData();

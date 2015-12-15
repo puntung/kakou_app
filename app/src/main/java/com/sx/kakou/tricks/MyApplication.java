@@ -7,7 +7,7 @@ import com.nrs.utils.tools.CrashHandler;
 /**
  * Created by mglory on 2015/10/9.
  */
-public class LogApplication extends Application {
+public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();

@@ -1,13 +1,12 @@
 package com.sx.kakou.util;
 
-import android.content.SharedPreferences;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.square.github.restrofit.Constants;
 import com.square.github.restrofit.KakouClient;
 import com.square.github.restrofit.ServiceGenerator;
-import com.sx.kakou.model.UserInfo;
+import com.sx.kakou.models.UserInfo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,8 +22,10 @@ import retrofit.client.Response;
 
 /**
  * Created by mglory on 2015/9/7.
+ * 预先加载数据保存在内存中
+ *
  */
-public class InitData {
+public class Global {
     private KakouClient client ;
     public static List<String> kkdd_list,fxbh_list,hpys_list,ppdm_list,ppdm_code_list;
     public static List<Integer> kkdd_code_list,fxbh_code_list,hpys_code_list;
@@ -33,8 +34,7 @@ public class InitData {
     public static Map<String,String> cllxmap;
     public static UserInfo userInfo = new UserInfo();
     public static LruCacheUtil lcu ;
-    public InitData() {
-        //初始化数据，并保存在内存中
+    public Global() {
         client = ServiceGenerator.createService(KakouClient.class, Constants.BASE_URL);
         kkdd_list = new ArrayList<>();
         fxbh_list = new ArrayList<>();
@@ -44,30 +44,44 @@ public class InitData {
         hpys_code_list = new ArrayList<>();
         fxbh_code_list = new ArrayList<>();
         ppdm_code_list = new ArrayList<>();
+
         hpzlmap = new HashMap<>();
         csysmap = new HashMap<>();
         cllxmap = new HashMap<>();
         lcu = new LruCacheUtil();
+    }
+
+    public void loaddata(){
         getKkdd();
         getFxbh();
         getHpys();
         getHpzl();
         getCsys();
         getCllx();
-        getPpdm();
+        getPpdmAll();
     }
-    public void getPpdm(){
+
+
+    public void getPpdmAll(){
         client.getPpdm(new Callback<JsonObject>() {
             @Override
             public void success(JsonObject jsonObject, Response response) {
                 try {
-                    ppdm_list.add("全部");
-                    ppdm_code_list.add("0");
+                    ppdm_list.add("全部品牌");
+                    ppdm_code_list.add("000");
                     JSONArray array = new JSONArray(jsonObject.get("items").toString());
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject object = new JSONObject(array.get(i).toString());
                         ppdm_list.add(object.getString("name"));
                         ppdm_code_list.add(object.getString("code"));
+                        JSONArray subppdm = new JSONArray(object.get("items").toString());
+                        if (subppdm.length() > 0) {
+                            for (int j = 0; j < subppdm.length(); j++) {
+                                JSONObject subobj = new JSONObject(subppdm.get(j).toString());
+                                ppdm_list.add(subobj.getString("name"));
+                                ppdm_code_list.add(subobj.getString("code"));
+                            }
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -91,7 +105,7 @@ public class InitData {
             public void success(JsonObject arg0, Response arg1) {
                 try {
                     JSONArray array = new JSONArray(arg0.get("items").toString());
-                    kkdd_list.add("全部");
+                    kkdd_list.add("全部卡点");
                     kkdd_code_list.add(0);
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject object = new JSONObject(array.get(i).toString());
@@ -110,7 +124,7 @@ public class InitData {
             @Override
             public void success(JsonObject jsonObject, Response response) {
                 try {
-                    hpys_list.add("全部");
+                    hpys_list.add("全部颜色");
                     hpys_code_list.add(0);
                     JSONArray array = new JSONArray(jsonObject.get("items").toString());
                     for (int i = 0; i < array.length(); i++) {
@@ -135,7 +149,7 @@ public class InitData {
             @Override
             public void success(JsonObject jsonObject, Response response) {
                 try {
-                    fxbh_list.add("全部");
+                    fxbh_list.add("全部方向");
                     fxbh_code_list.add(0);
                     JSONArray array = new JSONArray(jsonObject.get("items").toString());
                     for (int i = 0; i < array.length(); i++) {
@@ -168,7 +182,6 @@ public class InitData {
                     hpzlmap.put(object.get("code").toString().replace("\"", ""), object.get("name").toString().replace("\"", ""));
                 }
             }
-
             @Override
             public void failure(RetrofitError retrofitError) {
                 retrofitError.printStackTrace();
@@ -210,5 +223,4 @@ public class InitData {
             }
         });
     }
-
 }

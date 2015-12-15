@@ -1,6 +1,7 @@
 package com.sx.kakou.tricks;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,8 +88,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //这里更新数据
         try{
             JSONObject mobject = new JSONObject(marray.get(position).toString());
-            //imageLoader.displayImage(mobject.getString("thumb_url"),holder.carinfo_img,getImageLoaderOpt());
-            imageLoader.displayImage(mobject.getString("imgurl"),holder.carinfo_img,getImageLoaderOpt());
+            imageLoader.displayImage(mobject.getString("thumb_url"),holder.carinfo_img,getImageLoaderOpt());
+            //imageLoader.displayImage(mobject.getString("imgurl"),holder.carinfo_img,getImageLoaderOpt());
             holder.hphm.setText(mobject.getString("hphm"));
             holder.jgsj.setText(mobject.getString("jgsj").substring(0, 10));
             holder.cllx.setText(mobject.getString("cllx"));
@@ -116,16 +117,38 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
    *
    * */
     public DisplayImageOptions getImageLoaderOpt(){
+        final BitmapFactory.Options bo = new BitmapFactory.Options();
+        bo.inJustDecodeBounds = true;
+        bo.inSampleSize = calculateInSampleSize(bo,250,200);
+        bo.inJustDecodeBounds = false;
         DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .showStubImage(R.drawable.board_gray) //加载时显示的页面
+                .showStubImage(R.drawable.skin_loading_icon) //加载时显示的页面
                 .showImageForEmptyUri(R.drawable.board_gray)
                 .showImageOnFail(R.drawable.board_gray)
                 .bitmapConfig(Bitmap.Config.RGB_565)
-                .imageScaleType(ImageScaleType.EXACTLY)
+                .decodingOptions(bo)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .displayer(new FadeInBitmapDisplayer(100)) // 设置加载后渐入动画时间
                 .build();
         return options;
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options,
+                                            int reqWidth, int reqHeight) {
+        // 源图片的高度和宽度
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+        if (height > reqHeight || width > reqWidth) {
+            // 计算出实际宽高和目标宽高的比率
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+            // 选择宽和高中最小的比率作为inSampleSize的值，这样可以保证最终图片的宽和高
+            // 一定都会大于等于目标的宽和高。
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+        return inSampleSize;
     }
 }

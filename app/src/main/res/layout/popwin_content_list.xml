@@ -30,18 +30,18 @@
         <!--android:visibility="gone"-->
         <!--android:padding="10dp"-->
         <!--/>-->
-    <TextView
-        android:id="@+id/pop_load_tip"
-        android:layout_width="100dp"
-        android:layout_height="35dp"
-        android:text="加载中..."
-        android:gravity="center"
-        android:textSize="14sp"
-        android:layout_margin="8dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textColor="@color/font_grey"
-        android:background="@drawable/corners_bg"
-        android:visibility="gone"
-        />
+    <!--<TextView-->
+        <!--android:id="@+id/pop_load_tip"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="35dp"-->
+        <!--android:text="加载中..."-->
+        <!--android:gravity="center"-->
+        <!--android:textSize="14sp"-->
+        <!--android:layout_margin="8dp"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:textColor="@color/font_grey"-->
+        <!--android:background="@drawable/corners_bg"-->
+        <!--android:visibility="gone"-->
+        <!--/>-->
 </RelativeLayout>

@@ -1,38 +1,27 @@
 package com.sx.kakou.view;
 
 import com.example.sx_kakou.R;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.core.decode.BaseImageDecoder;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.square.github.restrofit.Constants;
 import com.square.github.restrofit.KakouClient;
 import com.square.github.restrofit.ServiceGenerator;
-import com.sx.kakou.model.UserInfo;
 import com.sx.kakou.tricks.ControlService;
 import com.sx.kakou.util.DataCleanManager;
-import com.sx.kakou.util.FileHelper;
-import com.sx.kakou.util.InitData;
+import com.sx.kakou.util.Global;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Fragment;
@@ -40,7 +29,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -53,19 +41,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-
 public class MainActivity extends Activity implements OnCheckedChangeListener,View.OnClickListener{
     private KakouClient client ;
 	private  FragmentManager mfragmentManager;
@@ -76,8 +51,6 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,Vi
     private  TextView cache;
     private  TextView tv_appversion;
     private PopupWindow popupWindow;
-    private ProgressDialog progressDialog = null;
-    private InitData initData;
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -90,17 +63,14 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,Vi
 	}
 
     private void init(){
-        progressDialog = ProgressDialog.show(this, null,"正在加载数据...",true);
-        progressDialog.setCancelable(false);
 		mfragmentManager = getFragmentManager();
 		mradioGroup = (RadioGroup)findViewById(R.id.rg_tab);
 		setup_view = (ImageView)findViewById(R.id.setup_v);
 		mradioGroup.setOnCheckedChangeListener(this);
 		setup_view.setOnClickListener(this);
         client = ServiceGenerator.createService(KakouClient.class, Constants.BASE_URL);
-//		//初始化数据，并保存在内存中
-        initData = new InitData();
-        progressDialog.dismiss();
+        Global global = new Global();
+        global.loaddata();
 	}
 
 	@Override
@@ -262,7 +232,7 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,Vi
 
     public void initImageLoader(Context context) {
 	        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-	        .threadPoolSize(5)
+	        .threadPoolSize(3)
 	        .threadPriority(Thread.NORM_PRIORITY - 2)
 	        .denyCacheImageMultipleSizesInMemory()
 	        .memoryCache(new LruMemoryCache(2* 1024 * 1024)) /// 设置内存缓存 默认为一个当前应用可用内存的1/8大小的LruMemoryCache

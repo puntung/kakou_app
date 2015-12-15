@@ -1,8 +1,8 @@
 package com.sx.kakou.view;
 
 import com.example.sx_kakou.R;
-import com.sx.kakou.model.UserInfo;
-import com.sx.kakou.util.InitData;
+import com.sx.kakou.models.UserInfo;
+import com.sx.kakou.util.Global;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -13,9 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 public class FragmentMore extends Fragment implements View.OnClickListener{
 	private static LinearLayout photolayout;
@@ -40,7 +37,7 @@ public class FragmentMore extends Fragment implements View.OnClickListener{
 	}
 
     public void initData(){
-        UserInfo us = InitData.userInfo;
+        UserInfo us = Global.userInfo;
         tv_username.setText(us.getRoleName().replace("\"", ""));
     }
     @Override

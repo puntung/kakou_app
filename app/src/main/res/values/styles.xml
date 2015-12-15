@@ -70,6 +70,8 @@
         <item name="android:layout_weight">1</item>  
         <item name="android:textSize">14sp</item>
         <item name="android:layout_marginLeft">10dp</item>    
-    </style> 
-
+    </style>
+    <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkboxdrawable</item>
+    </style>
 </resources>

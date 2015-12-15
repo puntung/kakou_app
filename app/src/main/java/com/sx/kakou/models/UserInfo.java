@@ -1,4 +1,4 @@
-package com.sx.kakou.model;
+package com.sx.kakou.models;
 
 /**
  * Created by mglory on 2015/11/9.

@@ -9,16 +9,10 @@ import android.widget.LinearLayout;
 
 
 import com.example.sx_kakou.R;
-import com.google.gson.JsonObject;
 import com.square.github.restrofit.Constants;
-import com.sx.kakou.util.InitData;
+import com.sx.kakou.util.Global;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by mglory on 2015/7/31.
@@ -37,6 +31,15 @@ public class CarinfoAdapter extends RecyclerView.Adapter {
         this.value_array = value_array;
         this.tag = tag;
     }
+
+    public JSONObject getJson() {
+        return json;
+    }
+
+    public void setJson(JSONObject json) {
+        this.json = json;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view  = LayoutInflater.from(parent.getContext())
@@ -54,19 +57,18 @@ public class CarinfoAdapter extends RecyclerView.Adapter {
             mHolder.position = position;
             mHolder.tv_tag.setText(value_array[position]);
             try{
-               System.out.println(json.toString());
                     if (tag_array!=null){
                         if (tag == Constants.TAG_CGS){
                             //替换
                             if (tag_array[position].equals("csys")){
                                 String key = json.getString("csys");
-                                mHolder.tv_value.setText(InitData.csysmap.get(key));
+                                mHolder.tv_value.setText(Global.csysmap.get(key));
                             }else if (tag_array[position].equals("hpzl")){
                                 String key = json.getString("hpzl");
-                                mHolder.tv_value.setText(InitData.hpzlmap.get(key));
+                                mHolder.tv_value.setText(Global.hpzlmap.get(key));
                             }else if (tag_array[position].equals("cllx")){
                                 String key = json.getString("cllx");
-                                mHolder.tv_value.setText(InitData.cllxmap.get(key));
+                                mHolder.tv_value.setText(Global.cllxmap.get(key));
                             }else {
                                 mHolder.tv_value.setText(json.getString(tag_array[position]));
                             }

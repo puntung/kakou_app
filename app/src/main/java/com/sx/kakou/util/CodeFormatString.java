@@ -1,22 +1,15 @@
 package com.sx.kakou.util;
 
-import android.view.Gravity;
-import android.widget.SimpleAdapter;
-
-import com.example.sx_kakou.R;
 import com.google.gson.JsonObject;
 import com.square.github.restrofit.Constants;
 import com.square.github.restrofit.KakouClient;
 import com.square.github.restrofit.ServiceGenerator;
-import com.sx.kakou.model.CxfxInfo;
-import com.sx.kakou.view.MainActivity;
+import com.sx.kakou.models.CxfxInfo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import retrofit.Callback;

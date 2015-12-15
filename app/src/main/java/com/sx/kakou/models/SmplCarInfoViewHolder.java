@@ -1,4 +1,4 @@
-package com.sx.kakou.model;
+package com.sx.kakou.models;
 
 import android.widget.ImageView;
 import android.widget.TextView;

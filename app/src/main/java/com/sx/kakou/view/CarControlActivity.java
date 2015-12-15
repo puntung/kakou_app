@@ -1,7 +1,6 @@
 package com.sx.kakou.view;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -28,26 +26,19 @@ import android.widget.Toast;
 import com.example.sx_kakou.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.square.github.restrofit.Constants;
-import com.square.github.restrofit.KakouClient;
-import com.square.github.restrofit.ServiceGenerator;
 import com.sx.kakou.tricks.ControlService;
 import com.sx.kakou.tricks.ControlViewAdapter;
 import com.sx.kakou.tricks.PopupWindowContentAdapter;
 import com.sx.kakou.tricks.PullLoadMoreRecyclerView;
 import com.sx.kakou.tricks.RecyclerViewAdapter;
-import com.sx.kakou.util.InitData;
+import com.sx.kakou.util.Global;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class CarControlActivity extends Activity implements OnClickListener{
 	private PullLoadMoreRecyclerView homeRefreshLayout;
@@ -265,10 +256,10 @@ public class CarControlActivity extends Activity implements OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.cc_tv_place:
-                showPopupWindowArea(InitData.kkdd_list, cc_place, v,"place");
+                showPopupWindowArea(Global.kkdd_list, cc_place, v,"place");
                 break;
             case R.id.cc_tv_fxhb:
-                showPopupWindowArea(InitData.fxbh_list, cc_fxbh, v, "fxbh");
+                showPopupWindowArea(Global.fxbh_list, cc_fxbh, v, "fxbh");
                 break;
             case R.id.cc_tv_control:
                 try{

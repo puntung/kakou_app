@@ -10,21 +10,15 @@ import com.google.gson.JsonObject;
 import com.square.github.restrofit.Constants;
 import com.square.github.restrofit.KakouClient;
 import com.square.github.restrofit.ServiceGenerator;
-import com.squareup.okhttp.Call;
-import com.sx.kakou.services.UpdateService;
 import com.sx.kakou.util.Global;
 import com.sx.kakou.util.UpdateVersion;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,7 +27,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.File;
 
 public class LoginActivity extends Activity implements OnClickListener{
 	private Button btn_login;

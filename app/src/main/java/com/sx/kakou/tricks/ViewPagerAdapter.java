@@ -18,9 +18,12 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.utils.ImageSizeUtils;
 import com.square.github.restrofit.Constants;
 import com.square.github.restrofit.KakouClient;
 import com.square.github.restrofit.ServiceGenerator;
@@ -80,10 +83,10 @@ public class ViewPagerAdapter extends PagerAdapter {
             sb_cys.setLayoutManager(layoutManager2);
             try {
                 JSONObject object = new JSONObject(array.get(position).toString());
-                String thumb_url = object.getString("thumb_url");
+                final String thumb_url = object.getString("thumb_url");
                 String qs = object.getString("hphm")+"+hpys:"+object.getString("hpys").substring(0,1);
                 String url = object.getString("imgurl");
-                DisplayImageOptions options = getImageLoaderOpt(thumb_url);
+                DisplayImageOptions options = getImageLoaderOpt();
                // DisplayImageOptions bigoptions = getImageLoaderOptNoPreLoad();
                 //PhotoViewAttacher mAttacher = new PhotoViewAttacher(car_img);
                 String carinfo_tag[] = context.getResources().getStringArray(R.array.catinfo_label_en);
@@ -91,6 +94,7 @@ public class ViewPagerAdapter extends PagerAdapter {
                 CarinfoAdapter carinfoAdapter = new CarinfoAdapter(context,object,carinfo_tag,carinfo_value,Constants.TAG_SB);
                 sb_cys.setAdapter(carinfoAdapter);
                 getCgsInfo(cgs_cys, nodata_tv, qs);
+
                 ImageLoader.getInstance().displayImage(url, car_img, options, new SimpleImageLoadingListener() {
                     @Override
                     public void onLoadingStarted(String imageUri, View view) {
@@ -130,6 +134,7 @@ public class ViewPagerAdapter extends PagerAdapter {
             view.addView(itemLayout, 0);
             return itemLayout;
     }
+
 
     @Override
     public void restoreState(Parcelable state, ClassLoader loader) {}
@@ -200,7 +205,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     * Imageloader的配置
     *
     * */
-    public DisplayImageOptions getImageLoaderOpt(String url){
+    public DisplayImageOptions getImageLoaderOpt(){
         //Bitmap bp = ImageLoader.getInstance().loadImageSync(url);
         final BitmapFactory.Options bo = new BitmapFactory.Options();
         bo.inJustDecodeBounds = true;
